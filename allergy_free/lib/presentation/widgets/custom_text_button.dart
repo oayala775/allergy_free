@@ -1,3 +1,4 @@
+import 'package:allergy_free/config/utils/custom_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:allergy_free/config/utils/custom_colors.dart';
@@ -62,10 +63,7 @@ class CustomTextButton extends StatelessWidget {
               context.pushNamed(route!);
             }
           },
-          child: Text(
-            text,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-          ),
+          child: Text(text, style: CustomTextStyles.whiteText600),
         ),
       ),
     );
