@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:allergy_free/config/utils/custom_colors.dart';
 
-class CustomButton extends StatelessWidget {
+class CustomTextButton extends StatelessWidget {
   final String text; // texto del botón
   final double width; // ancho del botón
   final double height; // alto del botón
@@ -13,7 +14,7 @@ class CustomButton extends StatelessWidget {
   final VoidCallback?
   onPressed; // callback que será llamado cuando el botón sea presionado
   final String? route; // ruta a la que redirige el botón
-  const CustomButton({
+  const CustomTextButton({
     super.key,
     required this.text,
     required this.width,
@@ -40,13 +41,12 @@ class CustomButton extends StatelessWidget {
               Set<WidgetState> states,
             ) {
               if (states.contains(WidgetState.hovered)) {
-                return hoverColor ?? Color(0xFF3B873E); // cuando se hace hover
+                return hoverColor ?? CustomColors.focus; // cuando se hace hover
               }
               if (states.contains(WidgetState.pressed)) {
-                return pressedColor ?? Color(0xFF3B873E); // cuando se presiona
+                return pressedColor ?? CustomColors.focus; // cuando se presiona
               }
-              return backgroundColor ??
-                  Color(0xFF66BB6A); // cuando no pasa nada
+              return backgroundColor ?? CustomColors.primary;
             }),
           ),
           onPressed: () {
