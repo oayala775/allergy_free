@@ -1,4 +1,5 @@
 import 'package:allergy_free/config/utils/custom_colors.dart';
+import 'package:allergy_free/config/utils/custom_text_styles.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -46,11 +47,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
           hintText: widget.text,
-          hintStyle: TextStyle(
-            fontWeight: FontWeight.w500,
-            color: CustomColors.greyLetters,
-            fontSize: 20,
-          ),
+          hintStyle: CustomTextStyles.greyedText,
           suffixIcon:
               // Ícono para mostrar/ocultar contraseña, solo en campos de password
               isPasswordField
