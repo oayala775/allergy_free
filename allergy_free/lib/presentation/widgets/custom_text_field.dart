@@ -1,3 +1,4 @@
+import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -26,13 +27,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
     OutlineInputBorder normalBorder = OutlineInputBorder(
       // borde normal
       borderRadius: BorderRadius.circular(70.0),
-      borderSide: BorderSide(color: Color(0xFF4CAF50), width: 3.0),
+      borderSide: BorderSide(color: CustomColors.primary, width: 3.0),
     );
 
     OutlineInputBorder focusBorder = OutlineInputBorder(
       // borde con focus
       borderRadius: BorderRadius.circular(70.0),
-      borderSide: BorderSide(color: Color(0xFF3B873E), width: 3.0),
+      borderSide: BorderSide(color: CustomColors.focus, width: 3.0),
     );
 
     return Padding(
@@ -47,7 +48,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           hintText: widget.text,
           hintStyle: TextStyle(
             fontWeight: FontWeight.w500,
-            color: Color(0xFF7E7E7E),
+            color: CustomColors.greyLetters,
             fontSize: 20,
           ),
           suffixIcon:
