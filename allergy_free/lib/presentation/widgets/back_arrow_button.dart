@@ -1,3 +1,4 @@
+import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -10,7 +11,7 @@ class BackArrowButton extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: FloatingActionButton(
         onPressed: () => context.pop(),
-        backgroundColor: Color.fromRGBO(44, 128, 38, 1),
+        backgroundColor: CustomColors.primary,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
