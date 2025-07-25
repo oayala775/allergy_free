@@ -20,6 +20,12 @@ class CustomTextStyles {
     fontSize: 32,
     fontFamily: "Inter",
   );
+  static const TextStyle titleLogin = TextStyle(
+    color: CustomColors.primary,
+    fontWeight: FontWeight.w700,
+    fontSize: 50,
+    fontFamily: "Inter",
+  );
   static const TextStyle signaling = TextStyle(
     color: Colors.white,
     fontWeight: FontWeight.w900,
