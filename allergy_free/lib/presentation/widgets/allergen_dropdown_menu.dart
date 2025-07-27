@@ -51,11 +51,15 @@ Widget build(BuildContext context) {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
+  
+            //Botón de selección
             SizedBox(
               width: widget.width,
               height: widget.height,
               child: InkWell(
-                onTap: () => _showMultiSelectDialog(context),
+                //funcionalidad
+                onTap: () => _showMultiSelectDialog(context), // Muestra el diálogo de selección
+                //Estilo del botón
                 borderRadius: BorderRadius.circular(50),
                 child: Container(
                   decoration: BoxDecoration(
@@ -66,12 +70,11 @@ Widget build(BuildContext context) {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Cambio clave: Expanded para el texto
                       Expanded(
                         child: Text(
                           "Selecciona uno o más alérgenos",
                           style: CustomTextStyles.greyedText,
-                          overflow: TextOverflow.ellipsis, // Puntos suspensivos si no cabe
+                          overflow: TextOverflow.ellipsis, // Evitar overflow si el texto no cabe
                           maxLines: 1, // Mantener en una sola línea
                         ),
                       ),
@@ -86,15 +89,20 @@ Widget build(BuildContext context) {
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+
+            //Visualización de alérgenos seleccionados (Chips)
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: 4,
+              runSpacing: -4,
               children: selectedAllergens.map((allergen) {
                 return Chip(
+                  shape: RoundedRectangleBorder( // Propiedad para redondear
+                    borderRadius: BorderRadius.circular(50), // Radio personalizado
+                  ),
                   label: Text(allergen),
                   backgroundColor: CustomColors.primary,
                   deleteIconColor: Colors.white,
+                  //labelStyle: CustomTextStyles.whiteText600,
                   onDeleted: () {
                     setState(() {
                       selectedAllergens.remove(allergen);
@@ -110,6 +118,7 @@ Widget build(BuildContext context) {
   );
 }
 
+//Dialogo de selección múltiple
 void _showMultiSelectDialog(BuildContext context) {
   showDialog(
     context: context,
@@ -118,14 +127,14 @@ void _showMultiSelectDialog(BuildContext context) {
         items: listaAlergenos
             .map((alergeno) => MultiSelectItem<String>(alergeno, alergeno))
             .toList(),
-        initialValue: selectedAllergens,
+        initialValue: selectedAllergens, // Valores seleccionados inicialmente
         title: const Text("Selecciona alérgenos", style: CustomTextStyles.greyedText),
         searchable: true,
         selectedColor: CustomColors.primary,
         checkColor: Colors.white,
         onConfirm: (values) {
           setState(() {
-            selectedAllergens = values.cast<String>();
+            selectedAllergens = values.cast<String>(); // Actualiza la lista de alérgenos seleccionados
           });
         },
       );
