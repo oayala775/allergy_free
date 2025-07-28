@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(leading: BackArrowButton(), title: Text(screenName)),
       body: Center(
-        child: AllergenDropdownMenu(width: 350, height: 60), // Aquí se muestra el dropdown
+        child: AllergenDropdownMenu(width: 350, height: 50), // Aquí se muestra el dropdown
       ),
     );
   }

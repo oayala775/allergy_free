@@ -72,7 +72,7 @@ Widget build(BuildContext context) {
                     children: [
                       Expanded(
                         child: Text(
-                          "Selecciona uno o más alérgenos",
+                          "Seleccionar alérgenos",
                           style: CustomTextStyles.greyedText,
                           overflow: TextOverflow.ellipsis, // Evitar overflow si el texto no cabe
                           maxLines: 1, // Mantener en una sola línea
@@ -92,7 +92,7 @@ Widget build(BuildContext context) {
 
             //Visualización de alérgenos seleccionados (Chips)
             Wrap(
-              spacing: 4,
+              spacing: 6,
               runSpacing: -4,
               children: selectedAllergens.map((allergen) {
                 return Chip(
@@ -102,7 +102,7 @@ Widget build(BuildContext context) {
                   label: Text(allergen),
                   backgroundColor: CustomColors.primary,
                   deleteIconColor: Colors.white,
-                  //labelStyle: CustomTextStyles.whiteText600,
+                  labelStyle: CustomTextStyles.whiteTextChip,
                   onDeleted: () {
                     setState(() {
                       selectedAllergens.remove(allergen);
@@ -130,6 +130,7 @@ void _showMultiSelectDialog(BuildContext context) {
         initialValue: selectedAllergens, // Valores seleccionados inicialmente
         title: const Text("Selecciona alérgenos", style: CustomTextStyles.greyedText),
         searchable: true,
+        searchIcon: Icon(Icons.search, color: CustomColors.greyLetters),
         selectedColor: CustomColors.primary,
         checkColor: Colors.white,
         onConfirm: (values) {
