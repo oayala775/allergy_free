@@ -1,4 +1,3 @@
-import 'package:allergy_free/presentation/widgets/allergen_dropdown_menu.dart';
 import 'package:allergy_free/presentation/widgets/back_arrow_button.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +10,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(leading: BackArrowButton(), title: Text(screenName)),
       body: Center( 
-        
+
       ),
     );
   }
