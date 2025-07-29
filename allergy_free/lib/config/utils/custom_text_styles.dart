@@ -44,4 +44,10 @@ class CustomTextStyles {
     fontSize: 14,
     fontFamily: "Inter",
   );
+  static const TextStyle inputText = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.w400,
+    fontSize: 20,
+    fontFamily: "Inter",
+  );
 }
