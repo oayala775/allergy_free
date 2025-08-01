@@ -40,6 +40,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: TextField(
+        style: CustomTextStyles.inputText,
         keyboardType: widget.inputType,
         obscureText:
             // Oculta o muestra el texto ingresado, solo en campos de password

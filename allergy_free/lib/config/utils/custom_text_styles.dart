@@ -38,4 +38,16 @@ class CustomTextStyles {
     fontSize: 24,
     fontFamily: "Inter",
   );
+  static const TextStyle whiteTextChip = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w600,
+    fontSize: 14,
+    fontFamily: "Inter",
+  );
+  static const TextStyle inputText = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.w400,
+    fontSize: 20,
+    fontFamily: "Inter",
+  );
 }
