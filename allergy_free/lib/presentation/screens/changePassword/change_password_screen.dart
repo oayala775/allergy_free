@@ -21,7 +21,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       child: Scaffold(
         appBar: AppBar(
           leading: BackArrowButton(),
-          actions: [Logo(height: 31, width: 105)],
+          actions: [Padding(
+            padding: const EdgeInsets.fromLTRB(0.0,0.0,20.0,0.0),
+            child: Logo(height: 31, width: 105),
+          )],
         ),
         body: SingleChildScrollView(
           child: IntrinsicHeight(child: ChangePasswordForm()),
@@ -75,10 +78,11 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
             CustomTextButton(
               text: "Change Password",
               width: double.infinity,
-              height: 56,
+              height: 64,
               onPressed: () {
                 // queda pendiente validar el formuario
               },
+              customTextStyle: CustomTextStyles.whiteText700,
             ),
             SizedBox(height: size.height * 0.04),
             // falta agregar el navbar
