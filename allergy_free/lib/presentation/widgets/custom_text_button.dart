@@ -15,6 +15,7 @@ class CustomTextButton extends StatelessWidget {
   final VoidCallback?
   onPressed; // callback que será llamado cuando el botón sea presionado
   final String? route; // ruta a la que redirige el botón
+  final TextStyle? customTextStyle;
   const CustomTextButton({
     super.key,
     required this.text,
@@ -25,6 +26,7 @@ class CustomTextButton extends StatelessWidget {
     this.hoverColor,
     this.onPressed,
     this.route,
+    this.customTextStyle
   });
 
   @override
@@ -63,7 +65,7 @@ class CustomTextButton extends StatelessWidget {
               context.pushNamed(route!);
             }
           },
-          child: Text(text, style: CustomTextStyles.whiteText600),
+          child: Text(text, style: customTextStyle),
         ),
       ),
     );

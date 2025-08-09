@@ -1,6 +1,7 @@
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
+import 'package:allergy_free/presentation/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:allergy_free/presentation/widgets/custom_text_field.dart';
 import 'package:allergy_free/presentation/widgets/custom_text_button.dart';
@@ -37,7 +38,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   constraints: BoxConstraints(minHeight: minTopHeight),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Icon(), SizedBox(height: 16.0), Logo()],
+                    children: [
+                      Icon(),
+                      SizedBox(height: 16.0),
+                      Logo(whiteLogo: true, height: 77, width: 263),
+                    ],
                   ),
                 ),
                 // Formulario
@@ -65,19 +70,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class Logo extends StatelessWidget {
-  const Logo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Image.asset(
-      'assets/images/logo/Logo_AllergyFree_blanco.png',
-      width: 263,
-      height: 77,
     );
   }
 }

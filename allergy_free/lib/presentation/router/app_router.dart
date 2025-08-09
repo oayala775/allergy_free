@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/login',
+  initialLocation: '/change_password',
   routes: [
     GoRoute(
       name: HomeScreen.screenName,
@@ -28,6 +28,11 @@ final appRouter = GoRouter(
       name: LoginScreen.screenName,
       path: '/login',
       builder: (context, state) => LoginScreen(),
+    ),
+    GoRoute(
+      name: ChangePasswordScreen.screenName,
+      path: '/change_password',
+      builder: (context, state) => ChangePasswordScreen(),
     ),
   ],
 );

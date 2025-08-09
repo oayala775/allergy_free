@@ -1,3 +1,4 @@
+export 'package:allergy_free/presentation/screens/changePassword/change_password_screen.dart';
 export 'package:allergy_free/presentation/screens/home/home_screen.dart';
 export 'package:allergy_free/presentation/screens/profile/profile_screen.dart';
 export 'package:allergy_free/presentation/screens/settings/settings_screen.dart';

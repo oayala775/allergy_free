@@ -14,9 +14,15 @@ class CustomTextStyles {
     fontSize: 20,
     fontFamily: "Inter",
   );
+  static const TextStyle whiteText700 = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w700,
+    fontSize: 24,
+    fontFamily: "Inter",
+  );
   static const TextStyle title = TextStyle(
     color: CustomColors.subtitle,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w700,
     fontSize: 32,
     fontFamily: "Inter",
   );
@@ -49,5 +55,11 @@ class CustomTextStyles {
     fontWeight: FontWeight.w400,
     fontSize: 20,
     fontFamily: "Inter",
+  );
+  static const TextStyle random = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.w400,
+    fontSize: 20,
+    fontFamily: "BalooThambi",
   );
 }
