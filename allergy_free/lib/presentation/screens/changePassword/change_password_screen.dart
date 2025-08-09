@@ -1,8 +1,8 @@
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
+import 'package:allergy_free/presentation/widgets/app_name_widget.dart';
 import 'package:allergy_free/presentation/widgets/back_arrow_button.dart';
 import 'package:allergy_free/presentation/widgets/custom_text_button.dart';
 import 'package:allergy_free/presentation/widgets/custom_text_field.dart';
-import 'package:allergy_free/presentation/widgets/logo.dart';
 import 'package:flutter/material.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -21,10 +21,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       child: Scaffold(
         appBar: AppBar(
           leading: BackArrowButton(),
-          actions: [Padding(
-            padding: const EdgeInsets.fromLTRB(0.0,0.0,20.0,0.0),
-            child: Logo(height: 31, width: 105),
-          )],
+          actions: [AppNameWidget()],
         ),
         body: SingleChildScrollView(
           child: IntrinsicHeight(child: ChangePasswordForm()),
