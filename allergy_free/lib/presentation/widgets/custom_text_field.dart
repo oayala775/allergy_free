@@ -28,13 +28,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
     OutlineInputBorder normalBorder = OutlineInputBorder(
       // borde normal
       borderRadius: BorderRadius.circular(70.0),
-      borderSide: BorderSide(color: CustomColors.primary, width: 3.0),
+      borderSide: BorderSide(color: CustomColors.primary, width: 4.0),
     );
 
     OutlineInputBorder focusBorder = OutlineInputBorder(
       // borde con focus
       borderRadius: BorderRadius.circular(70.0),
-      borderSide: BorderSide(color: CustomColors.focus, width: 3.0),
+      borderSide: BorderSide(color: CustomColors.focus, width: 4.0),
     );
 
     return Padding(
