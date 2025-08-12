@@ -199,14 +199,18 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
               String? customAllergen = await _showCustomAllergenDialog(context);
               
               if (customAllergen != null && customAllergen.isNotEmpty) {
+
+                String customAllergenNoSpaces= customAllergen.trim();
+
+                String customAllergenNormalized = customAllergenNoSpaces[0].toUpperCase() + customAllergenNoSpaces.substring(1).toLowerCase();
                 
                 // Agregar nuevo alérgeno a la lista principal si no existe
-                if (!listaAlergenos.contains(customAllergen)) {
-                  listaAlergenos.insert(listaAlergenos.length - 1, customAllergen);
+                if (!listaAlergenos.contains(customAllergenNormalized)) {
+                  listaAlergenos.insert(listaAlergenos.length - 1, customAllergenNormalized);
                 }
                 // Agregar al seleccionado si no está presente
-                if (!newSelected.contains(customAllergen)) {
-                  newSelected.add(customAllergen);
+                if (!newSelected.contains(customAllergenNormalized)) {
+                  newSelected.add(customAllergenNormalized);
                 }
               }
             }
