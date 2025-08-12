@@ -200,9 +200,7 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
               
               if (customAllergen != null && customAllergen.isNotEmpty) {
 
-                String customAllergenNoSpaces= customAllergen.trim();
-
-                String customAllergenNormalized = customAllergenNoSpaces[0].toUpperCase() + customAllergenNoSpaces.substring(1).toLowerCase();
+                String customAllergenNormalized = customAllergen[0].toUpperCase() + customAllergen.substring(1).toLowerCase();
                 
                 // Agregar nuevo alérgeno a la lista principal si no existe
                 if (!listaAlergenos.contains(customAllergenNormalized)) {
@@ -214,7 +212,6 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
                 }
               }
             }
-            
             // Actualizar estado
             setState(() => selectedAllergens = newSelected);
           },
