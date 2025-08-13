@@ -126,7 +126,7 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
     );
   }
 
-  // Función para mostrar diálogo de entrada de texto
+  // Función para mostrar diálogo de entrada de texto para agregar un alérgeno personalizado.
   Future<String?> _showCustomAllergenDialog(BuildContext context) async {
     TextEditingController controller = TextEditingController();
     return showDialog<String>(
@@ -198,15 +198,12 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
               // Mostrar diálogo personalizado
               String? customAllergen = await _showCustomAllergenDialog(context);
               
+              //Verificar si se ingresó un alérgeno personalizado
               if (customAllergen != null && customAllergen.isNotEmpty) {
 
                 String customAllergenNormalized = customAllergen[0].toUpperCase() + customAllergen.substring(1).toLowerCase();
                 
-                // Agregar nuevo alérgeno a la lista principal si no existe
-                if (!listaAlergenos.contains(customAllergenNormalized)) {
-                  listaAlergenos.insert(listaAlergenos.length - 1, customAllergenNormalized);
-                }
-                // Agregar al seleccionado si no está presente
+                // Agrega el alergeno personalizado a la lista
                 if (!newSelected.contains(customAllergenNormalized)) {
                   newSelected.add(customAllergenNormalized);
                 }
