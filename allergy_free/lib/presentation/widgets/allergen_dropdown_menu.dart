@@ -42,6 +42,7 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
     'Soja',
     'Tomate',
     'Trigo',
+    'Otro (escribir)',
   ];
 
   // Lista para almacenar los alérgenos seleccionados por el usuario.
@@ -125,6 +126,52 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
     );
   }
 
+  // Función para mostrar diálogo de entrada de texto para agregar un alérgeno personalizado.
+  Future<String?> _showCustomAllergenDialog(BuildContext context) async {
+    TextEditingController controller = TextEditingController();
+    return showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Agregar alérgeno', style: CustomTextStyles.greyedText),
+          content: SizedBox(
+            width: widget.width,
+            height: widget.height,
+            child:
+              TextField(
+                controller: controller,
+                autofocus: true,
+                style: CustomTextStyles.inputText,
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                  hintText: "Nombre del alérgeno",
+                  hintStyle: CustomTextStyles.greyedText,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50),
+                    borderSide: BorderSide(color: CustomColors.primary, width: 3.0)
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50),
+                    borderSide: BorderSide(color: CustomColors.focus, width: 3.0),
+                  ),
+                ),
+              ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('CANCEL', style: TextStyle(color: CustomColors.primary)),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, controller.text.trim()),
+              child: Text('OK', style: TextStyle(color: CustomColors.primary)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   //Dialogo de selección múltiple
   void _showMultiSelectDialog(BuildContext context) {
     showDialog(
@@ -133,17 +180,37 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
         return MultiSelectDialog(
           items: listaAlergenos
               .map((alergeno) => MultiSelectItem<String>(alergeno, alergeno))
-              .toList(), // Convierte la lista de alérgenos en una lista de MultiSelectItem
-          initialValue: selectedAllergens, // Valores seleccionados inicialmente
+              .toList(),
+          initialValue: selectedAllergens,
           title: const Text("Selecciona alérgenos", style: CustomTextStyles.greyedText),
           searchable: true,
           searchIcon: Icon(Icons.search, color: CustomColors.greyLetters),
           selectedColor: CustomColors.primary,
           checkColor: Colors.white,
-          onConfirm: (values) {
-            setState(() {
-              selectedAllergens = values.cast<String>(); // Actualiza la lista de alérgenos seleccionados
-            });
+          onConfirm: (values) async {
+            List<String> newSelected = List.from(values.cast<String>());
+            
+            // Verificar si seleccionó "Otro"
+            if (newSelected.contains('Otro (escribir)')) {
+              // Remover opción temporal
+              newSelected.remove('Otro (escribir)');
+              
+              // Mostrar diálogo personalizado
+              String? customAllergen = await _showCustomAllergenDialog(context);
+              
+              //Verificar si se ingresó un alérgeno personalizado
+              if (customAllergen != null && customAllergen.isNotEmpty) {
+
+                String customAllergenNormalized = customAllergen[0].toUpperCase() + customAllergen.substring(1).toLowerCase();
+                
+                // Agrega el alergeno personalizado a la lista
+                if (!newSelected.contains(customAllergenNormalized)) {
+                  newSelected.add(customAllergenNormalized);
+                }
+              }
+            }
+            // Actualizar estado
+            setState(() => selectedAllergens = newSelected);
           },
         );
       },

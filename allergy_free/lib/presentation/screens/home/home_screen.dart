@@ -9,9 +9,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(leading: BackArrowButton(), title: Text(screenName)),
-      body: Center( 
-
-      ),
     );
   }
 }
