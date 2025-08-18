@@ -1,4 +1,3 @@
-import 'package:allergy_free/config/utils/custom_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:allergy_free/config/utils/custom_colors.dart';
