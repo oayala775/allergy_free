@@ -73,7 +73,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
               width: double.infinity,
               height: 64,
               onPressed: () {
-                // queda pendiente validar el formuario
+                // TODO: Validate forms
               },
               customTextStyle: CustomTextStyles.whiteText700,
             ),

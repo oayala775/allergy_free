@@ -13,9 +13,7 @@ class BackArrowButton extends StatelessWidget {
         onPressed: () => context.pop(),
         backgroundColor: CustomColors.primary,
         elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
+        shape: CircleBorder(),
         child: const Icon(
           Icons.arrow_back_ios_new_rounded,
           color: Colors.white,

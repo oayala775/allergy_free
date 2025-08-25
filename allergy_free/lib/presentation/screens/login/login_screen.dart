@@ -124,7 +124,7 @@ class Formulary extends StatelessWidget {
                 width: double.infinity,
                 height: 56,
                 onPressed: () {
-                  print('Login button pressed');
+                  // TODO: Add redirection to main screen and validation of user
                   context.pushNamed(HomeScreen.screenName);
                 },
               ),
@@ -155,8 +155,7 @@ class SignUpPrompt extends StatelessWidget {
           Text('Don´t have an account? ', style: CustomTextStyles.greyedText),
           GestureDetector(
             onTap: () {
-              // Hay que redirigr a la pantalla de sign up
-              print("Ir a sign up");
+              // TODO: Hay que redirigr a la pantalla de sign up
             },
             child: Text(
               'Sign up',
