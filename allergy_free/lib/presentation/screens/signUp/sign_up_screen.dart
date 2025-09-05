@@ -148,7 +148,7 @@ class TermsAndConditionsBox extends StatelessWidget {
                     GoRouter.of(context).push('/terms_and_conditions');
                   },
                   child: Text(
-                    "Acepto los términos y condiciones",
+                    "I accept the terms and conditions",
                     style: CustomTextStyles.inputText,
                   ),
                 ),

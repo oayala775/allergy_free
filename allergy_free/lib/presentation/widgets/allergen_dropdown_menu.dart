@@ -72,7 +72,7 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          "Seleccionar alérgenos",
+                          "Select allergens",
                           style: CustomTextStyles.greyedText,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
