@@ -10,7 +10,7 @@ class BackArrowButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: FloatingActionButton(
-        onPressed: () => context.pop(),
+        onPressed: () => GoRouter.of(context).pop(),
         backgroundColor: CustomColors.primary,
         elevation: 0,
         shape: CircleBorder(),
