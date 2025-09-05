@@ -6,6 +6,7 @@ import 'package:allergy_free/presentation/widgets/custom_text_button.dart';
 import 'package:allergy_free/presentation/widgets/allergen_dropdown_menu.dart';
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpScreen extends StatefulWidget {
   static const String screenName = "sign_up_screen";
@@ -67,6 +68,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       text: 'Sign Up',
                       width: double.infinity,
                       height: 56,
+                      customTextStyle: CustomTextStyles.whiteText700,
                       onPressed: () {
                         // TODO: Implementar lógica de sign up. También hay que asegurarse de que se acepten los términos y condiciones
                       },
@@ -141,17 +143,18 @@ class TermsAndConditionsBox extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 14.0),
-                child: RichText(
-                  text: TextSpan(
+                child: TextButton(
+                  onPressed: () {
+                    GoRouter.of(context).push('/terms_and_conditions');
+                  },
+                  child: Text(
+                    "Acepto los términos y condiciones",
                     style: CustomTextStyles.inputText,
-                    // TODO: Agregar link a términos y condiciones
-                    children: [
-                      const TextSpan(text: 'Acepto los términos y condiciones'),
-                    ],
                   ),
                 ),
               ),
             ),
+            // ),
             const SizedBox(width: 24.0),
           ],
         ),

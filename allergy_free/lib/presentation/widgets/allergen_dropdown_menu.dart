@@ -64,7 +64,7 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
-                    border: Border.all(color: CustomColors.primary, width: 3),
+                    border: Border.all(color: CustomColors.primary, width: 4),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -147,7 +147,7 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
-                  borderSide: BorderSide(color: CustomColors.focus, width: 3.0),
+                  borderSide: BorderSide(color: CustomColors.focus, width: 4.0),
                 ),
               ),
             ),
