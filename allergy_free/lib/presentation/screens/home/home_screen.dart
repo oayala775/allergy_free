@@ -1,4 +1,5 @@
-import 'package:allergy_free/presentation/widgets/back_arrow_button.dart';
+import 'package:allergy_free/presentation/widgets/appbar.dart';
+import 'package:allergy_free/presentation/widgets/navbar.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -7,8 +8,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(leading: BackArrowButton(), title: Text(screenName)),
-    );
+    return Scaffold(appBar: Appbar(), body: const Text("Home screen"), bottomNavigationBar: Navbar());
   }
 }
