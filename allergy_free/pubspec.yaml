@@ -23,6 +23,7 @@ flutter:
   assets:
     - assets/images/icon/
     - assets/images/logo/
+    - assets/images/avatar/
 
 fonts:
   - family: Inter
