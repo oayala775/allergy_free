@@ -52,14 +52,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
           suffixIcon:
               // Ícono para mostrar/ocultar contraseña, solo en campos de password
               isPasswordField
-                  ? IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _obscureText = !_obscureText;
-                      });
-                    },
-                    icon: Icon(
-                      _obscureText ? Icons.visibility_off : Icons.visibility,
+                  ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                      icon: Icon(
+                        _obscureText ? Icons.visibility_off : Icons.visibility,
+                      ),
                     ),
                   )
                   : null,
