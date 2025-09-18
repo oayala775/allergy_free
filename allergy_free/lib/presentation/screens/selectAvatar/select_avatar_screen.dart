@@ -38,6 +38,7 @@ class _SelectAvatarScreen extends State<SelectAvatarScreen> {
     'assets/images/avatar/18_Pan.png',
     'assets/images/avatar/19_Apio.png',
     'assets/images/avatar/20_Soja.png',
+    'assets/images/avatar/21_Pistache.png',
   ];
 
   @override
@@ -154,7 +155,7 @@ class DefautlAvatar extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CircleAvatar(
-        radius: screenWidth * 0.21, // Usar el ancho de la pantalla para el tamaño
+        radius: screenWidth * 0.20, // Usar el ancho de la pantalla para el tamaño
         backgroundColor: Colors.transparent,
         backgroundImage: AssetImage(imagePath),
       ),
