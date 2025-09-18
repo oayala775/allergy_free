@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:allergy_free/presentation/widgets/appbar.dart';
 import 'package:allergy_free/presentation/widgets/custom_text_button.dart';
 import 'package:allergy_free/config/utils/custom_colors.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:go_router/go_router.dart';
+
 
 class SelectAvatarScreen extends StatefulWidget {
   static const String screenName = "select_avatar_screen";
@@ -15,19 +15,39 @@ class SelectAvatarScreen extends StatefulWidget {
 }
 
 class _SelectAvatarScreen extends State<SelectAvatarScreen> {
-  String? _selectedAvatar;
+  String _selectedAvatar = 'assets/images/avatar/0_Default.png';
 
   final List<String> avatars = [
-    'assets/images/avatar/aguacate.jpg',
-    'assets/images/avatar/cacahuate.jpg',
-    'assets/images/avatar/huevo.jpg',
-    'assets/images/avatar/fresa.jpg', 
-    'assets/images/avatar/Nuez.jpg',
-    'assets/images/avatar/leche.jpg',
+    'assets/images/avatar/1_Mostaza.png',
+    'assets/images/avatar/2_Nuez.png',
+    'assets/images/avatar/3_Chocolate.png',
+    'assets/images/avatar/4_Tomate.png', 
+    'assets/images/avatar/5_Manzana.png',
+    'assets/images/avatar/6_Canela.png',
+    'assets/images/avatar/7_Huevo.png',
+    'assets/images/avatar/8_Trigo.png',
+    'assets/images/avatar/9_Leche.png',
+    'assets/images/avatar/10_Cacahuate.png', 
+    'assets/images/avatar/11_Aguacate.png',
+    'assets/images/avatar/12_Camaron.png',
+    'assets/images/avatar/13_Almendra.png',
+    'assets/images/avatar/14_Pescado.png',
+    'assets/images/avatar/15_Fresa.png',
+    'assets/images/avatar/16_Naranja.png', 
+    'assets/images/avatar/17_Langosta.png',
+    'assets/images/avatar/18_Pan.png',
+    'assets/images/avatar/19_Apio.png',
+    'assets/images/avatar/20_Soja.png',
   ];
 
   @override
   Widget build(BuildContext context) {
+
+    final screenSize = MediaQuery.of(context).size;
+    final screenWidth = screenSize.width;
+    final screenHeight = screenSize.height;
+
+
     return Scaffold(
       appBar: const Appbar(),
       body: LayoutBuilder(
@@ -36,55 +56,75 @@ class _SelectAvatarScreen extends State<SelectAvatarScreen> {
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32.0,
-                  vertical: 16.0,
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.08,
+                  vertical: screenHeight * 0.02,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
+                  
                   children: [
-                    Center(child: DefautlAvatar()),
-                    const SizedBox(height: 10.0),
+                    const Text("Choose your avatar", style: CustomTextStyles.title, textAlign: TextAlign.center,),
+                    SizedBox(height: screenHeight * 0.02),
+                    Center(
+                      child: DefautlAvatar(
+                        imagePath: _selectedAvatar,
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.02),
 
                     SizedBox(
-                      height: 250, // controla la altura de la cuadrícula
+                      height: screenHeight * 0.45,
                       child: GridView.builder(
-                        scrollDirection: Axis.horizontal, // 👈 desplazamiento horizontal
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3, // número de filas
+                        scrollDirection: Axis.vertical,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
                           crossAxisSpacing: 16,
                           mainAxisSpacing: 16,
-                          childAspectRatio: 1, // cuadrado
+                          childAspectRatio: 1,
                         ),
                         itemCount: avatars.length,
                         itemBuilder: (context, index) {
+                          bool isSelected = _selectedAvatar == avatars[index];
                           return GestureDetector(
                             onTap: () {
-                              print("Seleccionaste: ${avatars[index]}");
+                              setState(() {
+                                _selectedAvatar = avatars[index];
+                              });
                             },
-                            child: CircleAvatar(
-                              backgroundColor: Colors.primaries[index % Colors.primaries.length], // fondo variado
-                              radius: 48,
-                              backgroundImage: AssetImage(avatars[index]),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: isSelected
+                                    ? Border.all(
+                                        color: CustomColors.focus, // Color del borde
+                                        width: 3.0, // Grosor del borde
+                                      )
+                                    : null,
+                              ),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.transparent,
+                                radius: 48,
+                                backgroundImage: AssetImage(avatars[index]),
+                              ),
                             ),
                           );
                         },
                       ),
                     ),
 
-                    const SizedBox(height: 16),
+                    
 
                     CustomTextButton(
                       text: 'Select avatar',
                       width: double.infinity,
-                      height: 56,
+                      height: screenHeight * 0.07,
                       customTextStyle: CustomTextStyles.whiteText700,
                       onPressed: () {
-                        // TODO: Implementar lógica de sign up. También hay que asegurarse de que se acepten los términos y condiciones
+                        // TODO: Guardar la selección (_selectedAvatar)
                       },
                     ),
-                    
                   ],
                 ),
               ),
@@ -97,25 +137,23 @@ class _SelectAvatarScreen extends State<SelectAvatarScreen> {
 }
 
 class DefautlAvatar extends StatelessWidget {
-  const DefautlAvatar({super.key});
+  final String imagePath;
+  final VoidCallback? onTap;
+
+  const DefautlAvatar({
+    super.key, 
+    required this.imagePath,
+    this.onTap
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // TODO: Dirigirse a la selección de avatar
-      },
-      child: DottedBorder(
-        options: CircularDottedBorderOptions(
-          color: CustomColors.primary,
-          strokeWidth: 5,
-          dashPattern: [20, 6],
-          padding: const EdgeInsets.all(16.0),
-        ),
-        child: Container(
-          alignment: Alignment.center,
-          child: Icon(Icons.add, size: 175 * 0.4, color: CustomColors.primary),
-        ),
+      onTap: onTap,
+      child: CircleAvatar(
+        radius: 80,
+        backgroundColor: Colors.transparent,
+        backgroundImage: AssetImage(imagePath),
       ),
     );
   }
