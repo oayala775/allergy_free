@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 
 
 class SelectAvatarScreen extends StatefulWidget {
-  static const String screenName = "select_avatar_screen";
+  static const String screenName = "select_avatar_screen"; //ruta de la pantalla
   const SelectAvatarScreen({super.key});
 
   @override
@@ -15,9 +15,9 @@ class SelectAvatarScreen extends StatefulWidget {
 }
 
 class _SelectAvatarScreen extends State<SelectAvatarScreen> {
-  String _selectedAvatar = 'assets/images/avatar/0_Default.png';
+  String _selectedAvatar = 'assets/images/avatar/0_Default.png'; // Avatar por defecto
 
-  final List<String> avatars = [
+  final List<String> avatars = [ // Lista de avatares disponibles
     'assets/images/avatar/1_Mostaza.png',
     'assets/images/avatar/2_Nuez.png',
     'assets/images/avatar/3_Chocolate.png',
@@ -43,13 +43,13 @@ class _SelectAvatarScreen extends State<SelectAvatarScreen> {
   @override
   Widget build(BuildContext context) {
 
+    // Obtener el tamaño de la pantalla
     final screenSize = MediaQuery.of(context).size;
     final screenWidth = screenSize.width;
     final screenHeight = screenSize.height;
 
-
     return Scaffold(
-      appBar: const Appbar(),
+      appBar: const Appbar(), // Barra de navegación personalizada
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
@@ -57,32 +57,32 @@ class _SelectAvatarScreen extends State<SelectAvatarScreen> {
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.08,
+                  horizontal: screenWidth * 0.04,
                   vertical: screenHeight * 0.02,
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  
+                  mainAxisAlignment: MainAxisAlignment.center, // Centrar verticalmente
+                  crossAxisAlignment: CrossAxisAlignment.stretch, // Estirar horizontalmente?
                   children: [
-                    const Text("Choose your avatar", style: CustomTextStyles.title, textAlign: TextAlign.center,),
-                    SizedBox(height: screenHeight * 0.02),
+                    const Text("Select your avatar", style: CustomTextStyles.title, textAlign: TextAlign.center,),
+                    SizedBox(height: screenHeight * 0.02), // Espacio entre el título y el avatar
                     Center(
                       child: DefautlAvatar(
                         imagePath: _selectedAvatar,
+                        screenHeight: screenHeight,
+                        screenWidth: screenWidth,
                       ),
                     ),
-                    SizedBox(height: screenHeight * 0.02),
-
+                    SizedBox(height: screenHeight * 0.02), // Espacio entre el avatar y la cuadrícula
                     SizedBox(
-                      height: screenHeight * 0.45,
+                      height: screenHeight * 0.45, // Altura fija para la cuadrícula
                       child: GridView.builder(
                         scrollDirection: Axis.vertical,
                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                          childAspectRatio: 1,
+                          crossAxisCount: 3, // Número de columnas
+                          crossAxisSpacing: 16, // Espacio entre columnas
+                          mainAxisSpacing: 16, // Espacio entre filas
+                          childAspectRatio: 1, // Relación de aspecto (ancho/alto)
                         ),
                         itemCount: avatars.length,
                         itemBuilder: (context, index) {
@@ -105,7 +105,6 @@ class _SelectAvatarScreen extends State<SelectAvatarScreen> {
                               ),
                               child: CircleAvatar(
                                 backgroundColor: Colors.transparent,
-                                radius: 48,
                                 backgroundImage: AssetImage(avatars[index]),
                               ),
                             ),
@@ -117,7 +116,7 @@ class _SelectAvatarScreen extends State<SelectAvatarScreen> {
                     
 
                     CustomTextButton(
-                      text: 'Select avatar',
+                      text: 'Select',
                       width: double.infinity,
                       height: screenHeight * 0.07,
                       customTextStyle: CustomTextStyles.whiteText700,
@@ -139,11 +138,15 @@ class _SelectAvatarScreen extends State<SelectAvatarScreen> {
 class DefautlAvatar extends StatelessWidget {
   final String imagePath;
   final VoidCallback? onTap;
+  final double screenWidth; // Nuevo parámetro
+  final double screenHeight; // Nuevo parámetro
 
   const DefautlAvatar({
     super.key, 
     required this.imagePath,
-    this.onTap
+    this.onTap,
+    required this.screenWidth, // Hacer obligatorio en el constructor
+    required this.screenHeight, // Hacer obligatorio en el constructor
   });
 
   @override
@@ -151,7 +154,7 @@ class DefautlAvatar extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: CircleAvatar(
-        radius: 80,
+        radius: screenWidth * 0.21, // Usar el ancho de la pantalla para el tamaño
         backgroundColor: Colors.transparent,
         backgroundImage: AssetImage(imagePath),
       ),
