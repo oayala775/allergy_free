@@ -6,3 +6,5 @@ export 'package:allergy_free/presentation/screens/settings/settings_screen.dart'
 export 'package:allergy_free/presentation/screens/transition/transition_screen.dart';
 export 'package:allergy_free/presentation/screens/signUp/sign_up_screen.dart';
 export 'package:allergy_free/presentation/screens/login/login_screen.dart';
+export 'package:allergy_free/presentation/screens/selectAvatar/select_avatar_screen.dart';
+

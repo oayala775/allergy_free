@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/settings',
+  initialLocation: '/select_avatar',
   routes: [
     GoRoute(
       name: HomeScreen.screenName,
@@ -43,6 +43,11 @@ final appRouter = GoRouter(
       name: SignUpScreen.screenName,
       path: '/sign_up',
       builder: (context, state) => SignUpScreen(),
+    ),
+    GoRoute(
+      name: SelectAvatarScreen.screenName,
+      path: '/select_avatar',
+      builder: (context, state) => SelectAvatarScreen(),
     ),
   ],
 );
