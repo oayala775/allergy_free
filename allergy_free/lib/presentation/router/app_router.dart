@@ -2,11 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(
-<<<<<<< Updated upstream
-  initialLocation: '/select_avatar',
-=======
   initialLocation: '/',
->>>>>>> Stashed changes
   routes: [
     GoRoute(
       name: HomeScreen.screenName,
