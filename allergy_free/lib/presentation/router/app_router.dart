@@ -2,7 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: '/profile',
   routes: [
     GoRoute(
       name: HomeScreen.screenName,
