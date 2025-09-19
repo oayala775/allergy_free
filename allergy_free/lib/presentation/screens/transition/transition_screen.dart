@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../widgets/widgets.dart';
 
 class TransitionScreen extends StatelessWidget {
   static const String screenName = "transition_screen";
@@ -6,6 +7,6 @@ class TransitionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text(screenName)));
+    return Scaffold(appBar: Appbar());
   }
 }

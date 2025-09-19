@@ -1,12 +1,9 @@
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:allergy_free/presentation/widgets/appbar.dart';
-import 'package:allergy_free/presentation/widgets/custom_text_field.dart';
-import 'package:allergy_free/presentation/widgets/custom_text_button.dart';
-import 'package:allergy_free/presentation/widgets/allergen_dropdown_menu.dart';
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:go_router/go_router.dart';
+import '../../widgets/widgets.dart';
 
 class SignUpScreen extends StatefulWidget {
   static const String screenName = "sign_up_screen";
@@ -131,31 +128,28 @@ class TermsAndConditionsBox extends StatelessWidget {
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 24.0),
-              child: Checkbox(
-                value: accepted,
-                activeColor: CustomColors.primary,
-                onChanged: (value) {
-                  onChanged(value ?? false);
+              padding: const EdgeInsets.fromLTRB(20.0, 14.0, 0.0, 14.0),
+              child: TextButton(
+                onPressed: () {
+                  GoRouter.of(context).push('/terms_and_conditions');
                 },
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 14.0),
-                child: TextButton(
-                  onPressed: () {
-                    GoRouter.of(context).push('/terms_and_conditions');
-                  },
-                  child: Text(
-                    "I accept the terms and conditions",
-                    style: CustomTextStyles.inputText,
-                  ),
+                child: Text(
+                  "I accept the terms and conditions",
+                  style: CustomTextStyles.inputText,
                 ),
               ),
             ),
-            // ),
-            const SizedBox(width: 24.0),
+            Checkbox(
+              value: accepted,
+              activeColor: CustomColors.primary,
+              onChanged: (value) {
+                onChanged(value ?? false);
+              },
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadiusGeometry.circular(20),
+                side: BorderSide(width: 8.0),
+              ),
+            ),
           ],
         ),
       ),
