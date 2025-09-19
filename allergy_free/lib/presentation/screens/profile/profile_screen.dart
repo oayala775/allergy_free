@@ -1,6 +1,5 @@
-import 'package:allergy_free/presentation/widgets/appbar.dart';
-import 'package:allergy_free/presentation/widgets/navbar.dart';
 import 'package:flutter/material.dart';
+import '../../widgets/widgets.dart';
 
 class ProfileScreen extends StatelessWidget {
   static const String screenName = "profile_screen";
