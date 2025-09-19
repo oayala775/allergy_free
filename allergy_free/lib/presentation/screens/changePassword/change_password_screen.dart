@@ -1,8 +1,7 @@
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
-import 'package:allergy_free/presentation/widgets/appbar.dart';
-import 'package:allergy_free/presentation/widgets/custom_text_button.dart';
-import 'package:allergy_free/presentation/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
+import '../../widgets/widgets.dart';
+
 
 class ChangePasswordScreen extends StatefulWidget {
   static const String screenName = "change_password_screen";
