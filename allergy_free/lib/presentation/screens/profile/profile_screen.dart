@@ -13,12 +13,12 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreen extends State<ProfileScreen> {
   String _username = 'Usuario_1';
-  String _avatar = 'assets/images/avatar/8_Trigo.png'; // Avatar por defecto
+  String _avatar = 'assets/images/avatar/19_Apio.png'; // Avatar por defecto
 
   final List<String> alegias = [ // Lista de avatares disponibles
     'Gluten',
-    'Lactosa',
-    'Nueces',
+    'Chocolate',
+    'Nuez',
   ];
 
   @override
@@ -58,7 +58,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                       height: screenHeight * 0.07,
                       customTextStyle: CustomTextStyles.whiteText700,
                       onPressed: () {
-                        // TODO: Guardar la selección (_selectedAvatar)
+                        // TODO: mandar pantalla editar perfil
                       },
                     ),
 
@@ -68,7 +68,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                       height: screenHeight * 0.07,
                       customTextStyle: CustomTextStyles.whiteText700,
                       onPressed: () {
-                        // TODO: Guardar la selección (_selectedAvatar)
+                        // TODO: mandar a pantalla cambiar contraseña
                       },
                     ),
 
@@ -78,7 +78,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                       height: screenHeight * 0.07,
                       customTextStyle: CustomTextStyles.whiteText700,
                       onPressed: () {
-                        // TODO: Guardar la selección (_selectedAvatar)
+                        // TODO: pop up cerrar sesión y cerrar sesión
                       },
                     ),
                   ],
@@ -92,80 +92,100 @@ class _ProfileScreen extends State<ProfileScreen> {
   }
 }
 
-Widget _ProfileCard(BuildContext context, String username, String avatar, 
-                      double screenWidth, double screenHeight, List<String> alergias) {
-    return Card(
-      color: CustomColors.primary, // Usando azul como color primario
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(40.0),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.04),
-        child: Column(
-          children: [
-            CircleAvatar(
-              radius: screenWidth * 0.20,
-              backgroundImage: AssetImage(avatar),
-              // Si no tienes la imagen, puedes usar un icono:
-              // child: Icon(Icons.person, size: 50),
-            ),
-            SizedBox(height: screenHeight * 0.02),
-            Text(
-              username,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: screenHeight * 0.02),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Allergies:',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            SizedBox(height: screenHeight * 0.01),
-            
-            // Tarjeta para la lista de alergias (fondo blanco)
-            Card(
-              color: Colors.white,
+Widget _ProfileCard(BuildContext context, String username, String avatar, double screenWidth, double screenHeight, List<String> alergias) {
+  // Calculamos el radio del avatar
+  double avatarRadius = screenWidth * 0.20;
+  
+  return Center(
+    child: SizedBox(
+      width: screenWidth * 0.85, // Ancho del card
+      child: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          // Card verde (con margen superior para el avatar)
+          Container(
+            margin: EdgeInsets.only(top: avatarRadius), // Margen para el espacio del avatar
+            child: Card(
+              color: CustomColors.primary,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
+                borderRadius: BorderRadius.circular(40.0),
               ),
               child: Padding(
-                padding: EdgeInsets.all(screenWidth * 0.03),
+                padding: EdgeInsets.only(
+                  top: avatarRadius + screenHeight * 0.02, // Espacio adicional para el avatar
+                  left: screenWidth * 0.05,
+                  right: screenWidth * 0.05,
+                  bottom: screenWidth * 0.05,
+                ),
                 child: Column(
                   children: [
-                    // Lista de alergias
-                    for (int i = 0; i < alergias.length; i++)
-                      Column(
-                        children: [
-                          ListTile(
-                            title: Text(
-                              alergias[i],
-                              style: TextStyle(
-                                fontSize: screenWidth * 0.04,
-                              ),
-                            ),
-                          ),
-                          // Separador (excepto para el último elemento)
-                          if (i < alergias.length - 1)
-                            Divider(height: 1, color: Colors.grey[300]),
-                        ],
+                    // Nombre de usuario
+                    Text(
+                      username,
+                      style: CustomTextStyles.whiteText700,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: screenHeight * 0.01),
+                    
+                    // Tarjeta para la lista de alergias (fondo blanco)
+                    Card(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25.0),
                       ),
+                      child: Padding(
+                        padding: EdgeInsets.all(screenWidth * 0.04),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Alergies', 
+                              style: CustomTextStyles.blackBold,
+                            ),
+                            
+                            // Lista de alergias
+                            for (int i = 0; i < alergias.length; i++)
+                              Column(
+                                children: [
+                                  ListTile(
+                                    title: Text(
+                                      alergias[i],
+                                      style: CustomTextStyles.inputText,
+                                    ),
+                                  ),
+                                  // Separador (excepto para el último elemento)
+                                  if (i < alergias.length - 1)
+                                    Divider(height: 1, color: Colors.grey[300]),
+                                ],
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+          
+          // Avatar posicionado en la parte superior
+          Positioned(
+            top: 0, // Colocamos el avatar en la parte superior
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: CustomColors.primary, // Borde del mismo color que la card
+                  width: 5.0,
+                ),
+              ),
+              child: CircleAvatar(
+                radius: avatarRadius,
+                backgroundImage: AssetImage(avatar),
+              ),
+            ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
