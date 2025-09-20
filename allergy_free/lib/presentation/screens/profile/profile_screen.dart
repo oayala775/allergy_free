@@ -1,5 +1,7 @@
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
+import 'package:allergy_free/presentation/screens/screens.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import '../../widgets/widgets.dart';
 
@@ -46,7 +48,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch, // Estirar horizontalmente?
                   children: [
                     const Text("Your profile", style: CustomTextStyles.title, textAlign: TextAlign.center,),
-                    SizedBox(height: screenHeight * 0.01), // Espacio entre el título y el avatar
+                    SizedBox(height: screenHeight * 0.02), // Espacio entre el título y el avatar
 
                     _ProfileCard(context, _username, _avatar, screenWidth, screenHeight, alegias),
 
@@ -58,7 +60,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                       height: screenHeight * 0.07,
                       customTextStyle: CustomTextStyles.whiteText700,
                       onPressed: () {
-                        // TODO: mandar pantalla editar perfil
+                        //TODO: Navegar a la pantalla de edición de perfil
                       },
                     ),
 
@@ -68,7 +70,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                       height: screenHeight * 0.07,
                       customTextStyle: CustomTextStyles.whiteText700,
                       onPressed: () {
-                        // TODO: mandar a pantalla cambiar contraseña
+                        context.pushNamed(ChangePasswordScreen.screenName);
                       },
                     ),
 
@@ -78,7 +80,8 @@ class _ProfileScreen extends State<ProfileScreen> {
                       height: screenHeight * 0.07,
                       customTextStyle: CustomTextStyles.whiteText700,
                       onPressed: () {
-                        // TODO: pop up cerrar sesión y cerrar sesión
+                        // TODO: pop up de confirmación
+                        context.pushNamed(LoginScreen.screenName);
                       },
                     ),
                   ],
@@ -98,7 +101,7 @@ Widget _ProfileCard(BuildContext context, String username, String avatar, double
   
   return Center(
     child: SizedBox(
-      width: screenWidth * 0.85, // Ancho del card
+      width: screenWidth * 0.86, // Ancho del card
       child: Stack(
         alignment: Alignment.topCenter,
         children: [
@@ -141,7 +144,6 @@ Widget _ProfileCard(BuildContext context, String username, String avatar, double
                               'Alergies', 
                               style: CustomTextStyles.blackBold,
                             ),
-                            
                             // Lista de alergias
                             for (int i = 0; i < alergias.length; i++)
                               Column(
