@@ -62,4 +62,10 @@ class CustomTextStyles {
     fontSize: 20,
     fontFamily: "BalooThambi",
   );
+    static const TextStyle blackBold = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.w800,
+    fontSize: 20,
+    fontFamily: "Inter",
+  );
 }
