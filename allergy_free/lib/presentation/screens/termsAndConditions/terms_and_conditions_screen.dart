@@ -1,7 +1,6 @@
-import 'package:allergy_free/config/utils/custom_text_styles.dart';
-import 'package:allergy_free/presentation/widgets/custom_text_button.dart';
 import 'package:flutter/material.dart';
-import 'package:allergy_free/presentation/widgets/appbar.dart';
+import 'package:allergy_free/config/utils/custom_text_styles.dart';
+import '../../widgets/widgets.dart';
 
 class TermsAndConditionsScreen extends StatelessWidget {
   static const String screenName = "terms_and_conditions_screen";

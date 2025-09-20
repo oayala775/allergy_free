@@ -1,11 +1,9 @@
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
-import 'package:allergy_free/presentation/widgets/logo.dart';
 import 'package:flutter/material.dart';
-import 'package:allergy_free/presentation/widgets/custom_text_field.dart';
-import 'package:allergy_free/presentation/widgets/custom_text_button.dart';
 import 'package:go_router/go_router.dart';
+import '../../widgets/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String screenName = "login_screen";
@@ -127,6 +125,7 @@ class Formulary extends StatelessWidget {
                   // TODO: Add redirection to main screen and validation of user
                   context.pushNamed(HomeScreen.screenName);
                 },
+                customTextStyle: CustomTextStyles.whiteText700,
               ),
             ],
           ),

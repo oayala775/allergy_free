@@ -1,10 +1,8 @@
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:allergy_free/presentation/widgets/appbar.dart';
-import 'package:allergy_free/presentation/widgets/custom_text_button.dart';
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:go_router/go_router.dart';
-
+import '../../widgets/widgets.dart';
 
 class SelectAvatarScreen extends StatefulWidget {
   static const String screenName = "select_avatar_screen"; //ruta de la pantalla
