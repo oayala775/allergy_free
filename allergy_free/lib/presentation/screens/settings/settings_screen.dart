@@ -13,7 +13,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: Appbar(),
-      body: Column(
+      body: ListView(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
