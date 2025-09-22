@@ -58,6 +58,7 @@ class Remainder extends StatelessWidget {
             border: Border.all(width: 4.0, color: CustomColors.primary),
             borderRadius: BorderRadius.all(Radius.circular(50.0)),
           ),
+          width: 350,
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 24.0,
