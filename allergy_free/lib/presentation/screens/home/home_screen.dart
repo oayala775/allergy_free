@@ -51,11 +51,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    final buttonSize = screenSize.width * 0.18; // 20% del ancho de la pantalla
-    final borderSize = buttonSize * 0.15; // Tamaño del borde exterior
+    final buttonSize = screenSize.width * 0.18; // tamaño del botón
+    final borderSize = buttonSize * 0.15; // tamaño del borde exterior
 
     return Scaffold(
-      appBar: Appbar(),
+      //appBar: Appbar(),
       body: SizedBox(
         width: double.infinity,
         height: double.infinity,
@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
             else
               const Center(child: CircularProgressIndicator()),
 
-            // Botón con borde blanco separado
+            // Boton
             Positioned(
               bottom: 30,
               left: (screenSize.width - buttonSize) / 2,
