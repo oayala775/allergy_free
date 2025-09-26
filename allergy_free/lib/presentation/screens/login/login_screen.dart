@@ -154,8 +154,8 @@ class SignUpPrompt extends StatelessWidget {
           Text('Don´t have an account? ', style: CustomTextStyles.greyedText),
           GestureDetector(
             onTap: () {
-              // TODO: Hay que redirigr a la pantalla de sign up
-            },
+              context.pushNamed(SignUpScreen.screenName);
+            },  
             child: Text(
               'Sign up',
               style: TextStyle(
