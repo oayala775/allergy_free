@@ -2,7 +2,6 @@ import 'package:allergy_free/config/utils/custom_text_styles.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/widgets.dart';
 
-
 class ChangePasswordScreen extends StatefulWidget {
   static const String screenName = "change_password_screen";
   const ChangePasswordScreen({super.key});
@@ -14,13 +13,10 @@ class ChangePasswordScreen extends StatefulWidget {
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      child: Scaffold(
-        appBar: Appbar(),
-        body: SingleChildScrollView(
-          child: IntrinsicHeight(child: ChangePasswordForm()),
-        ),
+    return Scaffold(
+      appBar: Appbar(),
+      body: SingleChildScrollView(
+        child: IntrinsicHeight(child: ChangePasswordForm()),
       ),
     );
   }
