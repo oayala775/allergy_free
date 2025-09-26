@@ -74,4 +74,29 @@ class CustomTextStyles {
     fontSize: 20,
     fontFamily: "Inter",
   );
+  static const TextStyle subsectionTitle = TextStyle(
+    color: CustomColors.subtitle,
+    fontWeight: FontWeight.w700,
+    fontSize: 20,
+    fontFamily: "Inter",
+  );
+  static const TextStyle warningText = TextStyle(
+    color: Colors.red,
+    fontWeight: FontWeight.w400,
+    fontSize: 20,
+    fontFamily: "Inter",
+  );
+  static const TextStyle bulletPoint = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+    height: 1.5,
+    fontFamily: "Inter",
+  );
+  static const TextStyle titlesTermsConditions = TextStyle(
+    color: CustomColors.subtitle,
+    fontWeight: FontWeight.w700,
+    fontSize: 24,
+    fontFamily: "Inter",
+  );
 }
