@@ -52,7 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       text: 'Enter your age',
                       inputType: TextInputType.number,
                     ),
-                    AllergenDropdownMenu(width: double.infinity, height: 60),
+                    AllergenDropdownMenu(width: double.infinity, height: 66),
                     TermsAndConditionsBox(
                       accepted: _acceptedTerms,
                       onChanged: (value) {
@@ -64,7 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     CustomTextButton(
                       text: 'Sign Up',
                       width: double.infinity,
-                      height: 56,
+                      height: 60,
                       customTextStyle: CustomTextStyles.whiteText700,
                       onPressed: () {
                         // TODO: Implementar lógica de sign up. También hay que asegurarse de que se acepten los términos y condiciones
