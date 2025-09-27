@@ -183,12 +183,17 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
                   )
                   .toList(),
           initialValue: selectedAllergens,
-          title: const Text(
-            "Selecciona alérgenos",
-            style: CustomTextStyles.greyedText,
+          title: Expanded(
+            child: const Text(
+              "Selecciona alérgenos",
+              style: CustomTextStyles.greyedText,
+            ),
           ),
           searchable: true,
-          searchIcon: Icon(Icons.search, color: CustomColors.greyLetters),
+          searchIcon: Icon(
+            Icons.search,
+            color: CustomColors.greyLetters,
+          ),
           selectedColor: CustomColors.primary,
           checkColor: Colors.white,
           onConfirm: (values) async {

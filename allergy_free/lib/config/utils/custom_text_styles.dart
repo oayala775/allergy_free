@@ -46,7 +46,7 @@ class CustomTextStyles {
   );
   static const TextStyle whiteTextChip = TextStyle(
     color: Colors.white,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w400,
     fontSize: 14,
     fontFamily: "Inter",
   );
