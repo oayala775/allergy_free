@@ -123,31 +123,39 @@ class TermsAndConditionsBox extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(color: CustomColors.primary, width: 4.0),
-          borderRadius: BorderRadius.circular(70.0),
+          borderRadius: BorderRadius.circular(20.0),
         ),
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(20.0, 14.0, 0.0, 14.0),
-              child: TextButton(
-                onPressed: () {
-                  GoRouter.of(context).push('/terms_and_conditions');
-                },
-                child: Text(
-                  "I accept the terms and conditions",
-                  style: CustomTextStyles.inputText,
+              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 10.0),
+              child: Expanded(
+                child: TextButton(
+                  onPressed: () {
+                    GoRouter.of(context).push('/terms_and_conditions');
+                  },
+                  child: Text(
+                    "I accept the\nterms and conditions",
+                    style: CustomTextStyles.inputText,
+                    overflow: TextOverflow.clip,
+                  ),
                 ),
               ),
             ),
-            Checkbox(
-              value: accepted,
-              activeColor: CustomColors.primary,
-              onChanged: (value) {
-                onChanged(value ?? false);
-              },
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadiusGeometry.circular(20),
-                side: BorderSide(width: 8.0),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10.0),
+                child: Checkbox(
+                  value: accepted,
+                  activeColor: CustomColors.primary,
+                  onChanged: (value) {
+                    onChanged(value ?? false);
+                  },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadiusGeometry.circular(20),
+                    side: BorderSide(width: 8.0),
+                  ),
+                ),
               ),
             ),
           ],
