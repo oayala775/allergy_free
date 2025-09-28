@@ -18,6 +18,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       body: SingleChildScrollView(
         child: IntrinsicHeight(child: ChangePasswordForm()),
       ),
+      bottomNavigationBar: Navbar(),
     );
   }
 }

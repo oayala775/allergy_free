@@ -91,6 +91,7 @@ class _ProfileScreen extends State<ProfileScreen> {
           );
         },
       ),
+    bottomNavigationBar: Navbar(),
     );
   }
 }
