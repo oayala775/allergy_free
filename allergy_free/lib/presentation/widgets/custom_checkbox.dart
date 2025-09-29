@@ -44,7 +44,7 @@ class CustomCheckbox extends StatelessWidget {
               },
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadiusGeometry.circular(20),
-                side: BorderSide(width: 8.0),
+                side: const BorderSide(width: 8.0),
               ),
             ),
           ],
