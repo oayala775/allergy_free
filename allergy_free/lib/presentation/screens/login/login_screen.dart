@@ -13,40 +13,103 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _logoPositionAnimation;
+  late Animation<double> _formHeightAnimation;
+  late Animation<double> _formOpacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 4000),
+      vsync: this,
+    );
+
+    // Animación para la posición del logo
+    _logoPositionAnimation = Tween<double>(
+      begin: 0.4, // Comienza centrado
+      end: 0.12, // Termina más abajo (12% desde arriba)
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+
+    // Animación para la altura del formulario
+    _formHeightAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+
+    // Animación para la opacidad del formulario
+    _formOpacityAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+
+    // Iniciar animación después de 2 segundos
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {
+        _animationController.forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size; // size del viewport
-    final double minTopHeight =
-        size.height *
-        0.32; // Altura mínima del contenedor que contiene el logo y el icono
+    final Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: CustomColors.primary,
-      body: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: size.height),
-          child: IntrinsicHeight(
-            child: Column(
-              children: [
-                // Icono y logo
-                Container(
-                  width: double.infinity,
-                  color: CustomColors.primary,
-                  padding: EdgeInsets.only(top: 32, bottom: 16),
-                  constraints: BoxConstraints(minHeight: minTopHeight),
+      body: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          return Stack(
+            children: [
+              // Logo que se mueve hacia arriba
+              Positioned(
+                top: size.height * _logoPositionAnimation.value,
+                left: 0,
+                right: 0,
+                child: Center(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(),
-                      SizedBox(height: 16.0),
+                      const Icon(),
+                      const SizedBox(height: 8.0),
                       Logo(whiteLogo: true, height: 77, width: 263),
                     ],
                   ),
                 ),
-                // Formulario
-                Expanded(
+              ),
+
+              // Formulario que aparece desde abajo
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Opacity(
+                  opacity: _formOpacityAnimation.value,
                   child: Container(
-                    width: double.infinity,
+                    height: size.height * 0.6 * _formHeightAnimation.value,
+                    constraints: BoxConstraints(
+                      maxHeight: size.height * 0.6,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -54,19 +117,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         topRight: Radius.circular(64.0),
                       ),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 16,
-                      ),
-                      child: Formulary(),
-                    ),
+                    child: _formHeightAnimation.value > 0.3
+                        ? SingleChildScrollView(
+                            physics: const ClampingScrollPhysics(),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 24,
+                              ),
+                              child: Formulary(),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -98,25 +166,30 @@ class Formulary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Form(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
                 'Login',
                 style: CustomTextStyles.titleLogin,
                 textAlign: TextAlign.center,
               ),
+              const SizedBox(height: 5),
               const CustomTextField(
                 text: 'Username',
                 inputType: TextInputType.text,
               ),
+              const SizedBox(height: 5),
               const CustomTextField(
                 text: 'Password',
                 inputType: TextInputType.visiblePassword,
               ),
+              const SizedBox(height: 5),
               CustomTextButton(
                 text: 'Login',
                 width: double.infinity,
@@ -129,6 +202,7 @@ class Formulary extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 5),
           const SignUpPrompt(),
         ],
       ),
@@ -141,12 +215,8 @@ class SignUpPrompt extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size; // size del viewport
     return Padding(
-      padding: EdgeInsets.only(
-        top: size.height * 0.02,
-        bottom: size.height * 0.06,
-      ),
+      padding: const EdgeInsets.only(top: 20, bottom: 20),
       child: Wrap(
         alignment: WrapAlignment.center,
         crossAxisAlignment: WrapCrossAlignment.center,
@@ -155,7 +225,7 @@ class SignUpPrompt extends StatelessWidget {
           GestureDetector(
             onTap: () {
               context.pushNamed(SignUpScreen.screenName);
-            },  
+            },
             child: Text(
               'Sign up',
               style: TextStyle(
