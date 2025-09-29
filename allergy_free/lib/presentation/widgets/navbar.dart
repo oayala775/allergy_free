@@ -48,17 +48,17 @@ class Navbar extends ConsumerWidget {
       currentIndex: getCurrentIndex(context, ref) ?? lastIndex,
       onTap: (value) => onItemTapped(context, value, ref),
       elevation: 0,
-      items: [
+      items: const [
         BottomNavigationBarItem(
-          icon: const Icon(Icons.menu, size: 50),
+          icon: Icon(Icons.menu, size: 50),
           label: 'Settings Screen',
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.home, size: 50),
+          icon: Icon(Icons.home, size: 50),
           label: 'Home Screen',
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.person, size: 50),
+          icon: Icon(Icons.person, size: 50),
           label: 'Profile Screen',
         ),
       ],
