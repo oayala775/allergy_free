@@ -25,20 +25,26 @@ class _CustomTextFieldState extends State<CustomTextField> {
         // Comprueba si el Widget es para leer un password
         widget.inputType == TextInputType.visiblePassword;
 
-    OutlineInputBorder normalBorder = OutlineInputBorder(
+    final OutlineInputBorder normalBorder = OutlineInputBorder(
       // borde normal
       borderRadius: BorderRadius.circular(70.0),
       borderSide: BorderSide(color: CustomColors.primary, width: 4.0),
     );
 
-    OutlineInputBorder focusBorder = OutlineInputBorder(
+    final OutlineInputBorder focusBorder = OutlineInputBorder(
       // borde con focus
       borderRadius: BorderRadius.circular(70.0),
       borderSide: BorderSide(color: CustomColors.focus, width: 4.0),
     );
 
+    void toggleObscureText() {
+      setState(() {
+        _obscureText = !_obscureText;
+      });
+    }
+
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: TextField(
         style: CustomTextStyles.inputText,
         keyboardType: widget.inputType,
@@ -46,24 +52,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
             // Oculta o muestra el texto ingresado, solo en campos de password
             isPasswordField ? _obscureText : false,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 24,
+            vertical: 18,
+          ),
           hintText: widget.text,
           hintStyle: CustomTextStyles.greyedText,
           suffixIcon:
               // Ícono para mostrar/ocultar contraseña, solo en campos de password
               isPasswordField
-                  ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
-                      icon: Icon(
-                        _obscureText ? Icons.visibility_off : Icons.visibility,
-                      ),
-                    ),
+                  ? _PasswordVisibilityIcon(
+                    obscureText: _obscureText,
+                    onPressed: toggleObscureText,
                   )
                   : null,
           border: normalBorder,
@@ -72,6 +72,27 @@ class _CustomTextFieldState extends State<CustomTextField> {
           filled: true,
           fillColor: Colors.white,
         ),
+      ),
+    );
+  }
+}
+
+class _PasswordVisibilityIcon extends StatelessWidget {
+  final bool obscureText;
+  final VoidCallback onPressed;
+
+  const _PasswordVisibilityIcon({
+    required this.obscureText,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: IconButton(
+        onPressed: onPressed,
+        icon: Icon(obscureText ? Icons.visibility_off : Icons.visibility),
       ),
     );
   }
