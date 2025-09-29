@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                     width: buttonSize,
                     height: buttonSize,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: Navbar(),
+      bottomNavigationBar: const Navbar(),
     );
   }
 }

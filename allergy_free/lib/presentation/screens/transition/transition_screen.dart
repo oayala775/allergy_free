@@ -10,7 +10,7 @@ class TransitionScreen extends StatelessWidget {
   @override
   // TODO: Queda pendiente la transición a la página de resultados.
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       appBar: Appbar(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -25,17 +25,17 @@ class ProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return const Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text("Analizing Ingredients", style: CustomTextStyles.darkGrey400),
-          const SizedBox(height: 16),
+          SizedBox(height: 16),
           SizedBox(
             // Línea de progreso
             width: 175,
             child: LinearProgressIndicator(
-              backgroundColor: const Color(0xFFD9D9D9),
+              backgroundColor: Color(0xFFD9D9D9),
               color: CustomColors.primary,
             ),
           ),
@@ -56,11 +56,11 @@ class Remainder extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             border: Border.all(width: 4.0, color: CustomColors.primary),
-            borderRadius: BorderRadius.all(Radius.circular(50.0)),
+            borderRadius: const BorderRadius.all(Radius.circular(50.0)),
           ),
           width: 350,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
+          child: const Padding(
+            padding: EdgeInsets.symmetric(
               horizontal: 24.0,
               vertical: 8.0,
             ),
