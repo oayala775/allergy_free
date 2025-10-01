@@ -6,7 +6,7 @@ class AppNameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return const Padding(
       padding: EdgeInsetsGeometry.fromLTRB(0.0, 0.0, 20.0, 0.0),
       child: Logo(height: 31, width: 105),
     );

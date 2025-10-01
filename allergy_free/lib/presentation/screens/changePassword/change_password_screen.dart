@@ -14,11 +14,33 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbar(),
-      body: SingleChildScrollView(
-        child: IntrinsicHeight(child: ChangePasswordForm()),
-      ),
-      bottomNavigationBar: Navbar(),
+      appBar: const Appbar(),
+      body: const _ChangePasswordContent(),
+      bottomNavigationBar: const Navbar(),
+    );
+  }
+}
+
+class _ChangePasswordContent extends StatelessWidget {
+  const _ChangePasswordContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: constraints.maxHeight,
+            ),
+            child: const IntrinsicHeight(
+              child: ChangePasswordForm(),
+            ),
+          ),
+        );
+      },
     );
   }
 }
@@ -44,40 +66,49 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(height: size.height * 0.1),
-            Text(
+            const SizedBox(height: 40),
+            const Text(
               "Create New\nPassword",
               style: CustomTextStyles.title,
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: size.height * 0.02),
-            CustomTextField(
+            const SizedBox(height: 20),
+            const CustomTextField(
               text: "Current Password",
               inputType: TextInputType.visiblePassword,
             ),
-            CustomTextField(
+            const CustomTextField(
               text: "New Password",
               inputType: TextInputType.visiblePassword,
             ),
-            CustomTextField(
+            const CustomTextField(
               text: "Confirm New Password",
               inputType: TextInputType.visiblePassword,
             ),
-            SizedBox(height: size.height * 0.02),
+            const SizedBox(height: 20),
             CustomTextButton(
               text: "Change Password",
               width: double.infinity,
               height: 64,
-              onPressed: () {
-                // TODO: Validate forms
-              },
+              onPressed: _changePassword,
               customTextStyle: CustomTextStyles.whiteText700,
             ),
-            SizedBox(height: size.height * 0.04),
-            // falta agregar el navbar
+            const Flexible(
+              child: SizedBox(height: 20),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void _changePassword() {
+    // Hide keyboard when button is pressed
+    FocusScope.of(context).unfocus();
+    
+    // TODO: Validate forms and implement password change logic
+    // if (_formKey.currentState?.validate() ?? false) {
+    //   // Form is valid, proceed with password change
+    // }
   }
 }

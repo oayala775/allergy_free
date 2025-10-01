@@ -23,6 +23,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           return SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: Padding(
@@ -34,25 +35,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Center(child: AvatarSelectButton()),
+                    const Center(child: AvatarSelectButton()),
                     const SizedBox(height: 10.0),
-                    CustomTextField(
+                    const CustomTextField(
                       text: 'Enter your username',
                       inputType: TextInputType.text,
                     ),
-                    CustomTextField(
+                    const CustomTextField(
                       text: 'Enter your password',
                       inputType: TextInputType.visiblePassword,
                     ),
-                    CustomTextField(
+                    const CustomTextField(
                       text: 'Re-enter your password',
                       inputType: TextInputType.visiblePassword,
                     ),
-                    CustomTextField(
+                    const CustomTextField(
                       text: 'Enter your age',
                       inputType: TextInputType.number,
                     ),
-                    AllergenDropdownMenu(width: double.infinity, height: 66),
+                    const AllergenDropdownMenu(
+                      width: double.infinity,
+                      height: 66,
+                    ),
                     TermsAndConditionsBox(
                       accepted: _acceptedTerms,
                       onChanged: (value) {
@@ -88,14 +92,14 @@ class AvatarSelectButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // TODO: Dirigirse a la selección de avatar
+        GoRouter.of(context).pushNamed("select_avatar_screen");
       },
       child: DottedBorder(
-        options: CircularDottedBorderOptions(
+        options: const CircularDottedBorderOptions(
           color: CustomColors.primary,
           strokeWidth: 5,
           dashPattern: [20, 6],
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
         ),
         child: Container(
           alignment: Alignment.center,
@@ -134,7 +138,7 @@ class TermsAndConditionsBox extends StatelessWidget {
                   onPressed: () {
                     GoRouter.of(context).push('/terms_and_conditions');
                   },
-                  child: Text(
+                  child: const Text(
                     "I accept the\nterms and conditions",
                     style: CustomTextStyles.inputText,
                     overflow: TextOverflow.clip,
@@ -153,7 +157,7 @@ class TermsAndConditionsBox extends StatelessWidget {
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadiusGeometry.circular(20),
-                    side: BorderSide(width: 8.0),
+                    side: const BorderSide(width: 8.0),
                   ),
                 ),
               ),

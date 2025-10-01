@@ -38,60 +38,81 @@ class _ProfileScreen extends State<ProfileScreen> {
           return SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.04,
-                  vertical: screenHeight * 0.02,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center, // Centrar verticalmente
-                  crossAxisAlignment: CrossAxisAlignment.stretch, // Estirar horizontalmente?
-                  children: [
-                    const Text("Your profile", style: CustomTextStyles.title, textAlign: TextAlign.center,),
-                    SizedBox(height: screenHeight * 0.02), // Espacio entre el título y el avatar
-
-                    _ProfileCard(context, _username, _avatar, screenWidth, screenHeight, alegias),
-
-                    SizedBox(height: screenHeight * 0.01), // Espacio entre el título y el avatar
-
-                    CustomTextButton(
-                      text: 'Edit Profile',
-                      width: double.infinity,
-                      height: screenHeight * 0.07,
-                      customTextStyle: CustomTextStyles.whiteText700,
-                      onPressed: () {
-                        //TODO: Navegar a la pantalla de edición de perfil
-                      },
-                    ),
-
-                    CustomTextButton(
-                      text: 'Change Password',
-                      width: double.infinity,
-                      height: screenHeight * 0.07,
-                      customTextStyle: CustomTextStyles.whiteText700,
-                      onPressed: () {
-                        context.pushNamed(ChangePasswordScreen.screenName);
-                      },
-                    ),
-
-                    CustomTextButton(
-                      text: 'Log Out',
-                      width: double.infinity,
-                      height: screenHeight * 0.07,
-                      customTextStyle: CustomTextStyles.whiteText700,
-                      onPressed: () {
-                        // TODO: pop up de confirmación
-                        context.pushNamed(LoginScreen.screenName);
-                      },
-                    ),
-                  ],
-                ),
-              ),
+              child: _ProfileScreenContents(screenWidth: screenWidth, screenHeight: screenHeight, username: _username, avatar: _avatar, alegias: alegias),
             ),
           );
         },
       ),
-    bottomNavigationBar: Navbar(),
+    bottomNavigationBar: const Navbar(),
+    );
+  }
+}
+
+class _ProfileScreenContents extends StatelessWidget {
+  const _ProfileScreenContents({
+    required this.screenWidth,
+    required this.screenHeight,
+    required String username,
+    required String avatar,
+    required this.alegias,
+  }) : _username = username, _avatar = avatar;
+
+  final double screenWidth;
+  final double screenHeight;
+  final String _username;
+  final String _avatar;
+  final List<String> alegias;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: screenWidth * 0.04,
+        vertical: screenHeight * 0.02,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center, // Centrar verticalmente
+        crossAxisAlignment: CrossAxisAlignment.stretch, // Estirar horizontalmente?
+        children: [
+          const Text("Your profile", style: CustomTextStyles.title, textAlign: TextAlign.center,),
+          SizedBox(height: screenHeight * 0.02), // Espacio entre el título y el avatar
+    
+          _ProfileCard(context, _username, _avatar, screenWidth, screenHeight, alegias),
+    
+          SizedBox(height: screenHeight * 0.01), // Espacio entre el título y el avatar
+    
+          CustomTextButton(
+            text: 'Edit Profile',
+            width: double.infinity,
+            height: screenHeight * 0.07,
+            customTextStyle: CustomTextStyles.whiteText700,
+            onPressed: () {
+              //TODO: Navegar a la pantalla de edición de perfil
+            },
+          ),
+    
+          CustomTextButton(
+            text: 'Change Password',
+            width: double.infinity,
+            height: screenHeight * 0.07,
+            customTextStyle: CustomTextStyles.whiteText700,
+            onPressed: () {
+              context.pushNamed(ChangePasswordScreen.screenName);
+            },
+          ),
+    
+          CustomTextButton(
+            text: 'Log Out',
+            width: double.infinity,
+            height: screenHeight * 0.07,
+            customTextStyle: CustomTextStyles.whiteText700,
+            onPressed: () {
+              // TODO: pop up de confirmación
+              context.pushNamed(LoginScreen.screenName);
+            },
+          ),
+        ],
+      ),
     );
   }
 }

@@ -13,7 +13,7 @@ class BackArrowButton extends StatelessWidget {
         onPressed: () => GoRouter.of(context).pop(),
         backgroundColor: CustomColors.primary,
         elevation: 0,
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         child: const Icon(
           Icons.arrow_back_ios_new_rounded,
           color: Colors.white,

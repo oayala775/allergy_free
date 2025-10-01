@@ -65,7 +65,7 @@ class _SelectAvatarScreen extends State<SelectAvatarScreen> {
                     const Text("Select your avatar", style: CustomTextStyles.title, textAlign: TextAlign.center,),
                     SizedBox(height: screenHeight * 0.02), // Espacio entre el título y el avatar
                     Center(
-                      child: DefautlAvatar(
+                      child: DefaultAvatar(
                         imagePath: _selectedAvatar,
                         screenHeight: screenHeight,
                         screenWidth: screenWidth,
@@ -133,13 +133,13 @@ class _SelectAvatarScreen extends State<SelectAvatarScreen> {
   }
 }
 
-class DefautlAvatar extends StatelessWidget {
+class DefaultAvatar extends StatelessWidget {
   final String imagePath;
   final VoidCallback? onTap;
   final double screenWidth; // Nuevo parámetro
   final double screenHeight; // Nuevo parámetro
 
-  const DefautlAvatar({
+  const DefaultAvatar({
     super.key, 
     required this.imagePath,
     this.onTap,

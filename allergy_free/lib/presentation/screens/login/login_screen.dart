@@ -33,28 +33,22 @@ class _LoginScreenState extends State<LoginScreen>
     _logoPositionAnimation = Tween<double>(
       begin: 0.4, // Comienza centrado
       end: 0.12, // Termina más abajo (12% desde arriba)
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.fastEaseInToSlowEaseOut,
+      ),
+    );
 
     // Animación para la altura del formulario
-    _formHeightAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _formHeightAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
 
     // Animación para la opacidad del formulario
-    _formOpacityAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
+    _formOpacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
 
     // Iniciar animación después de 2 segundos
     Future.delayed(const Duration(seconds: 2), () {
@@ -72,12 +66,17 @@ class _LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
+    precacheImage(
+      const AssetImage('assets/images/icon/Icon_AllergyFree.png'),
+      context,
+    );
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: CustomColors.primary,
       body: AnimatedBuilder(
         animation: _animationController,
+        child: _FormContent(),
         builder: (context, child) {
           return Stack(
             children: [
@@ -86,14 +85,16 @@ class _LoginScreenState extends State<LoginScreen>
                 top: size.height * _logoPositionAnimation.value,
                 left: 0,
                 right: 0,
-                child: Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(),
-                      const SizedBox(height: 8.0),
-                      Logo(whiteLogo: true, height: 77, width: 263),
-                    ],
+                child: const RepaintBoundary(
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(),
+                        SizedBox(height: 8.0),
+                        Logo(whiteLogo: true, height: 77, width: 263),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -105,30 +106,22 @@ class _LoginScreenState extends State<LoginScreen>
                 right: 0,
                 child: Opacity(
                   opacity: _formOpacityAnimation.value,
-                  child: Container(
-                    height: size.height * 0.6 * _formHeightAnimation.value,
-                    constraints: BoxConstraints(
-                      maxHeight: size.height * 0.6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(64.0),
-                        topRight: Radius.circular(64.0),
+                  child: RepaintBoundary(
+                    child: Container(
+                      height: size.height * 0.6 * _formHeightAnimation.value,
+                      constraints: BoxConstraints(maxHeight: size.height * 0.6),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(64.0),
+                          topRight: Radius.circular(64.0),
+                        ),
                       ),
+                      child:
+                          _formHeightAnimation.value > 0.3
+                              ? child
+                              : const SizedBox.shrink(),
                     ),
-                    child: _formHeightAnimation.value > 0.3
-                        ? SingleChildScrollView(
-                            physics: const ClampingScrollPhysics(),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 24,
-                                vertical: 24,
-                              ),
-                              child: Formulary(),
-                            ),
-                          )
-                        : const SizedBox.shrink(),
                   ),
                 ),
               ),
@@ -152,6 +145,7 @@ class Icon extends StatelessWidget {
         borderRadius: BorderRadius.circular(250),
         image: const DecorationImage(
           image: AssetImage('assets/images/icon/Icon_AllergyFree.png'),
+          fit: BoxFit.cover
         ),
       ),
     );
@@ -221,12 +215,15 @@ class SignUpPrompt extends StatelessWidget {
         alignment: WrapAlignment.center,
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          Text('Don´t have an account? ', style: CustomTextStyles.greyedText),
+          const Text(
+            'Don´t have an account? ',
+            style: CustomTextStyles.greyedText,
+          ),
           GestureDetector(
             onTap: () {
               context.pushNamed(SignUpScreen.screenName);
             },
-            child: Text(
+            child: const Text(
               'Sign up',
               style: TextStyle(
                 fontFamily: 'inter',
@@ -237,6 +234,21 @@ class SignUpPrompt extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _FormContent extends StatelessWidget {
+  const _FormContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return const SingleChildScrollView(
+      physics: ClampingScrollPhysics(),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+        child: Formulary(),
       ),
     );
   }

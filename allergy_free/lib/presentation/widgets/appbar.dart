@@ -8,8 +8,8 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: BackArrowButton(),
-      actions: [AppNameWidget()],
+      leading: const BackArrowButton(),
+      actions: const [AppNameWidget()],
     );
   }
 

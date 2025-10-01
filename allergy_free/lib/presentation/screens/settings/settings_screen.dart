@@ -12,13 +12,13 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Appbar(),
+      appBar: const Appbar(),
       body: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
             child: Center(
-              child: const Text('Settings', style: CustomTextStyles.title),
+              child: Text('Settings', style: CustomTextStyles.title),
             ),
           ),
           _CustomCheckbox(
@@ -28,10 +28,10 @@ class SettingsScreen extends StatelessWidget {
             width: 400,
             height: 64,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
             child: Center(
-              child: const Text('Account', style: CustomTextStyles.title),
+              child: Text('Account', style: CustomTextStyles.title),
             ),
           ),
           CustomTextButton(
@@ -61,10 +61,10 @@ class SettingsScreen extends StatelessWidget {
               GoRouter.of(context).pushNamed(LoginScreen.screenName);
             },
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
             child: Center(
-              child: const Text('Support', style: CustomTextStyles.title),
+              child: Text('Support', style: CustomTextStyles.title),
             ),
           ),
           CustomTextButton(
@@ -83,7 +83,7 @@ class SettingsScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: Navbar(),
+      bottomNavigationBar: const Navbar(),
     );
   }
 }
@@ -110,7 +110,7 @@ class _CustomCheckbox extends StatelessWidget {
         width: width,
         height: height,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(40)),
+          borderRadius: const BorderRadius.all(Radius.circular(40)),
           border: BoxBorder.all(color: CustomColors.primary, width: 4.0),
         ),
         child: Row(
@@ -135,7 +135,7 @@ class _CustomCheckbox extends StatelessWidget {
                 },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadiusGeometry.circular(20),
-                  side: BorderSide(width: 8.0),
+                  side: const BorderSide(width: 8.0),
                 ),
               ),
             ),
