@@ -15,7 +15,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreen extends State<ProfileScreen> {
   final String _username = 'Usuario_1';
-  final String _avatar = 'assets/images/avatar/19_Apio.png'; // Avatar por defecto
+  final String _avatar = 'assets/images/avatar/19_Celery.png'; // Avatar por defecto
 
   final List<String> alegias = [ // Lista de avatares disponibles
     'Gluten',
