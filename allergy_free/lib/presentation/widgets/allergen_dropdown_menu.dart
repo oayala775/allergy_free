@@ -21,27 +21,27 @@ class AllergenDropdownMenu extends StatefulWidget {
 // Estado del widget AllergenDropdownMenu que maneja la lógica de selección de alérgenos.
 class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
   // Lista de alérgenos disponibles para seleccionar.
-  final List<String> listaAlergenos = [
-    'Almendra',
-    'Apio',
-    'Cacahuate',
+  final List<String> allergenList = [
+    'Almond',
+    'Celery',
+    'Peanut',
     'Chocolate',
-    'Fresa',
+    'Strawberry',
     'Gluten',
-    'Huevo',
+    'Egg',
     'Kiwi',
-    'Leche',
-    'Manzana',
-    'Mariscos',
-    'Nuez',
-    'Nuez de la India',
-    'Pescado',
-    'Pistache',
-    'Sésamo/Ajonjolí',
-    'Soja',
-    'Tomate',
-    'Trigo',
-    'Otro (escribir)',
+    'Milk',
+    'Apple',
+    'Shellfish',
+    'Walnut',
+    'Cashew',
+    'Fish',
+    'Pistachio',
+    'Sesame',
+    'Soy',
+    'Tomato',
+    'Wheat',
+    'Other (specify)',
   ];
 
   // Lista para almacenar los alérgenos seleccionados por el usuario.
@@ -177,7 +177,7 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
       builder: (ctx) {
         return MultiSelectDialog(
           items:
-              listaAlergenos
+              allergenList
                   .map(
                     (alergeno) => MultiSelectItem<String>(alergeno, alergeno),
                   )
@@ -185,15 +185,12 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
           initialValue: selectedAllergens,
           title: Expanded(
             child: const Text(
-              "Selecciona alérgenos",
+              "Select your allergens",
               style: CustomTextStyles.greyedText,
             ),
           ),
           searchable: true,
-          searchIcon: Icon(
-            Icons.search,
-            color: CustomColors.greyLetters,
-          ),
+          searchIcon: Icon(Icons.search, color: CustomColors.greyLetters),
           selectedColor: CustomColors.primary,
           checkColor: Colors.white,
           onConfirm: (values) async {
