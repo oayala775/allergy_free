@@ -131,34 +131,32 @@ class TermsAndConditionsBox extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 10.0),
-              child: Expanded(
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 8.0, 0.0, 10.0),
                 child: TextButton(
                   onPressed: () {
                     GoRouter.of(context).push('/terms_and_conditions');
                   },
                   child: const Text(
-                    "I accept the\nterms and conditions",
+                    "I accept the terms and conditions",
                     style: CustomTextStyles.inputText,
                     overflow: TextOverflow.clip,
                   ),
                 ),
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: Checkbox(
-                  value: accepted,
-                  activeColor: CustomColors.primary,
-                  onChanged: (value) {
-                    onChanged(value ?? false);
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(20),
-                    side: const BorderSide(width: 8.0),
-                  ),
+            Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: Checkbox(
+                value: accepted,
+                activeColor: CustomColors.primary,
+                onChanged: (value) {
+                  onChanged(value ?? false);
+                },
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadiusGeometry.circular(20),
+                  side: const BorderSide(width: 8.0),
                 ),
               ),
             ),
