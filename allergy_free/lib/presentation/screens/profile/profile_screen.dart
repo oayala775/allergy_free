@@ -15,13 +15,74 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreen extends State<ProfileScreen> {
   final String _username = 'Usuario_1';
-  final String _avatar = 'assets/images/avatar/19_Apio.png'; // Avatar por defecto
+  final String _avatar = 'assets/images/avatar/19_Celery.png'; // Avatar por defecto (actualizado a inglés)
 
   final List<String> alegias = [ // Lista de avatares disponibles
     'Gluten',
     'Chocolate',
-    'Nuez',
+    'Walnut', // Actualizado a inglés
   ];
+
+  // Función para mostrar el diálogo de confirmación de cierre de sesión
+  void _showLogoutDialog(BuildContext context) {
+  final screenSize = MediaQuery.of(context).size;
+  final screenWidth = screenSize.width;
+  final screenHeight = screenSize.height;
+  
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (context) => AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50.0),
+      ),
+      title: const Text(
+        "Are you sure you want to log out?",
+        style: CustomTextStyles.popupTitle,
+        textAlign: TextAlign.center,
+      ),
+      content: SizedBox(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                // Botón Cancelar
+                SizedBox(
+                   // Mitad del ancho del diálogo menos un pequeño margen
+                  child:  CustomTextButton(
+                      text: 'No',
+                      width: screenWidth * 0.25, //
+                      height: screenHeight * 0.07,
+                      customTextStyle: CustomTextStyles.blackText700, // O el estilo que prefieras
+                      backgroundColor: Colors.grey, // Color para el botón cancelar
+                      onPressed: () => context.pop(),
+                    ),
+                ),
+                // Botón Aceptar
+                SizedBox(
+                   
+                  child: CustomTextButton(
+                      text: 'Yes',
+                      width: screenWidth * 0.25, 
+                      height: screenHeight * 0.07,
+                      customTextStyle: CustomTextStyles.whiteText700,
+                      backgroundColor: CustomColors.primary,
+                      onPressed: () {
+                        context.pop(); // Cerrar el diálogo
+                        context.pushNamed(LoginScreen.screenName); // Navegar al login
+                      },
+                    ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+      // Eliminamos la propiedad "actions" ya que ahora usamos el content
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +99,14 @@ class _ProfileScreen extends State<ProfileScreen> {
           return SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
-              child: _ProfileScreenContents(screenWidth: screenWidth, screenHeight: screenHeight, username: _username, avatar: _avatar, alegias: alegias),
+              child: _ProfileScreenContents(
+                screenWidth: screenWidth, 
+                screenHeight: screenHeight, 
+                username: _username, 
+                avatar: _avatar, 
+                alegias: alegias,
+                onLogoutPressed: () => _showLogoutDialog(context), // Pasar la función como callback
+              ),
             ),
           );
         },
@@ -55,6 +123,7 @@ class _ProfileScreenContents extends StatelessWidget {
     required String username,
     required String avatar,
     required this.alegias,
+    required this.onLogoutPressed,
   }) : _username = username, _avatar = avatar;
 
   final double screenWidth;
@@ -62,6 +131,7 @@ class _ProfileScreenContents extends StatelessWidget {
   final String _username;
   final String _avatar;
   final List<String> alegias;
+  final VoidCallback onLogoutPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -106,10 +176,7 @@ class _ProfileScreenContents extends StatelessWidget {
             width: double.infinity,
             height: screenHeight * 0.07,
             customTextStyle: CustomTextStyles.whiteText700,
-            onPressed: () {
-              // TODO: pop up de confirmación
-              context.pushNamed(LoginScreen.screenName);
-            },
+            onPressed: onLogoutPressed, // Usar la función pasada como callback
           ),
         ],
       ),
@@ -163,7 +230,7 @@ Widget _ProfileCard(BuildContext context, String username, String avatar, double
                         child: Column(
                           children: [
                             Text(
-                              'Alergies', 
+                              'Allergies', // Corregido a inglés
                               style: CustomTextStyles.blackBold,
                             ),
                             // Lista de alergias
