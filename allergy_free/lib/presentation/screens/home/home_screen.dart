@@ -25,13 +25,10 @@ class _HomeScreenState extends State<HomeScreen> {
       final cameras = await availableCameras();
       final firstCamera = cameras.first;
 
-      _controller = CameraController(
-        firstCamera,
-        ResolutionPreset.medium,
-      );
+      _controller = CameraController(firstCamera, ResolutionPreset.medium);
 
       await _controller!.initialize();
-      
+
       if (mounted) {
         setState(() {
           _isCameraInitialized = true;
@@ -60,13 +57,19 @@ class _HomeScreenState extends State<HomeScreen> {
         width: double.infinity,
         height: double.infinity,
         child: Stack(
+          fit: StackFit.passthrough,
           children: [
             // Vista de la cámara que ocupa todo el espacio disponible
             if (_isCameraInitialized && _controller != null)
-              SizedBox(
-                width: double.infinity,
-                height: double.infinity,
-                child: CameraPreview(_controller!),
+              FittedBox(
+                fit: BoxFit.fill,
+                child: SizedBox(
+                  width: _controller!.value.previewSize!.width,
+                  height: _controller!.value.previewSize!.height,
+                  // width: double.infinity,
+                  // height: double.infinity,
+                  child: CameraPreview(_controller!),
+                ),
               )
             else
               const Center(child: CircularProgressIndicator()),
@@ -76,7 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
               bottom: 30,
               left: (screenSize.width - buttonSize) / 2,
               child: Container(
-                width: buttonSize + borderSize * 2, // Añade espacio para el borde
+                width:
+                    buttonSize + borderSize * 2, // Añade espacio para el borde
                 height: buttonSize + borderSize * 2,
                 decoration: BoxDecoration(
                   color: Colors.transparent,
