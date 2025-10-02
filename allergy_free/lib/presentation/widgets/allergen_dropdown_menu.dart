@@ -70,7 +70,7 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const SizedBox(width: 8),
-                      Expanded(
+                      const Expanded(
                         child: Text(
                           "Select allergens",
                           style: CustomTextStyles.greyedText,
@@ -78,7 +78,7 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
                           maxLines: 1,
                         ),
                       ),
-                      Icon(
+                      const Icon(
                         Icons.arrow_drop_down,
                         color: CustomColors.greyLetters,
                         size: 30,
@@ -126,7 +126,7 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Agregar alérgeno', style: CustomTextStyles.greyedText),
+          title: const Text('Add allergen', style: CustomTextStyles.greyedText),
           content: SizedBox(
             width: widget.width,
             height: widget.height,
@@ -136,7 +136,7 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
               style: CustomTextStyles.inputText,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                hintText: "Nombre del alérgeno",
+                hintText: "Allergen name",
                 hintStyle: CustomTextStyles.greyedText,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
@@ -147,7 +147,10 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
-                  borderSide: BorderSide(color: CustomColors.focus, width: 4.0),
+                  borderSide: const BorderSide(
+                    color: CustomColors.focus,
+                    width: 4.0,
+                  ),
                 ),
               ),
             ),
@@ -155,14 +158,17 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text(
+              child: const Text(
                 'CANCEL',
                 style: TextStyle(color: CustomColors.primary),
               ),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, controller.text.trim()),
-              child: Text('OK', style: TextStyle(color: CustomColors.primary)),
+              child: const Text(
+                'OK',
+                style: TextStyle(color: CustomColors.primary),
+              ),
             ),
           ],
         );
@@ -183,23 +189,23 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
                   )
                   .toList(),
           initialValue: selectedAllergens,
-          title: Expanded(
-            child: const Text(
+          title: const Expanded(
+            child: Text(
               "Select your allergens",
               style: CustomTextStyles.greyedText,
             ),
           ),
           searchable: true,
-          searchIcon: Icon(Icons.search, color: CustomColors.greyLetters),
+          searchIcon: const Icon(Icons.search, color: CustomColors.greyLetters),
           selectedColor: CustomColors.primary,
           checkColor: Colors.white,
           onConfirm: (values) async {
             List<String> newSelected = List.from(values.cast<String>());
 
             // Verificar si seleccionó "Otro"
-            if (newSelected.contains('Otro (escribir)')) {
+            if (newSelected.contains('Other (specify)')) {
               // Remover opción temporal
-              newSelected.remove('Otro (escribir)');
+              newSelected.remove('Other (specify)');
 
               // Mostrar diálogo personalizado
               String? customAllergen = await _showCustomAllergenDialog(context);
