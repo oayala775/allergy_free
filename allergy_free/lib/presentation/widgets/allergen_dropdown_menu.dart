@@ -22,27 +22,27 @@ class AllergenDropdownMenu extends StatefulWidget {
 class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
   // Lista de alérgenos disponibles para seleccionar.
   final List<String> allergenList = [
-  'Almond',
-  'Celery',
-  'Peanut',
-  'Chocolate',
-  'Strawberry',
-  'Gluten',
-  'Egg',
-  'Kiwi',
-  'Milk',
-  'Apple',
-  'Shellfish',
-  'Walnut',
-  'Cashew',
-  'Fish',
-  'Pistachio',
-  'Sesame',
-  'Soy',
-  'Tomato',
-  'Wheat',
-  'Other (specify)',
-];
+    'Almond',
+    'Celery',
+    'Peanut',
+    'Chocolate',
+    'Strawberry',
+    'Gluten',
+    'Egg',
+    'Kiwi',
+    'Milk',
+    'Apple',
+    'Shellfish',
+    'Walnut',
+    'Cashew',
+    'Fish',
+    'Pistachio',
+    'Sesame',
+    'Soy',
+    'Tomato',
+    'Wheat',
+    'Other (specify)',
+  ];
 
   // Lista para almacenar los alérgenos seleccionados por el usuario.
   List<String> selectedAllergens = [];
@@ -185,15 +185,12 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
           initialValue: selectedAllergens,
           title: Expanded(
             child: const Text(
-              "Selecciona alérgenos",
+              "Select your allergens",
               style: CustomTextStyles.greyedText,
             ),
           ),
           searchable: true,
-          searchIcon: Icon(
-            Icons.search,
-            color: CustomColors.greyLetters,
-          ),
+          searchIcon: Icon(Icons.search, color: CustomColors.greyLetters),
           selectedColor: CustomColors.primary,
           checkColor: Colors.white,
           onConfirm: (values) async {
