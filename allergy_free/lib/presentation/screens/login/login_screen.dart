@@ -1,8 +1,10 @@
+import 'package:allergy_free/database/database_operations.dart';
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+// import 'package:sqflite/sqflite.dart';
 import '../../widgets/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -145,16 +147,56 @@ class Icon extends StatelessWidget {
         borderRadius: BorderRadius.circular(250),
         image: const DecorationImage(
           image: AssetImage('assets/images/icon/Icon_AllergyFree.png'),
-          fit: BoxFit.cover
+          fit: BoxFit.cover,
         ),
       ),
     );
   }
 }
 
-class Formulary extends StatelessWidget {
+class Formulary extends StatefulWidget {
   const Formulary({super.key});
   // Queda pendiente la validación del formulario y el manejo de errores
+
+  @override
+  State<Formulary> createState() => _FormularyState();
+}
+
+class _FormularyState extends State<Formulary> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _handleLogin() async {
+    final String username = _usernameController.text;
+    final String password = _passwordController.text;
+
+    print('Username: $username');
+    print('Password: $password');
+
+    try {
+      final user = await DatabaseOperations().login(username, password);
+      if (user != null) {
+        // Login successful, navigate to home screen
+        // context.pushNamed(HomeScreen.screenName);
+        print('valido');
+      } else {
+        // Login failed, show error message
+        print('Invalid username or password');
+      }
+    } catch (e) {
+      print('Error en login: $e');
+    }
+
+    // TODO: Add redirection to main screen and validation of user
+    // context.pushNamed(HomeScreen.screenName);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -174,24 +216,23 @@ class Formulary extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 5),
-              const CustomTextField(
+              CustomTextField(
                 text: 'Username',
                 inputType: TextInputType.text,
+                controller: _usernameController,
               ),
               const SizedBox(height: 5),
-              const CustomTextField(
+              CustomTextField(
                 text: 'Password',
                 inputType: TextInputType.visiblePassword,
+                controller: _passwordController,
               ),
               const SizedBox(height: 5),
               CustomTextButton(
                 text: 'Login',
                 width: double.infinity,
                 height: 56,
-                onPressed: () {
-                  // TODO: Add redirection to main screen and validation of user
-                  context.pushNamed(HomeScreen.screenName);
-                },
+                onPressed: _handleLogin,
                 customTextStyle: CustomTextStyles.whiteText700,
               ),
             ],
