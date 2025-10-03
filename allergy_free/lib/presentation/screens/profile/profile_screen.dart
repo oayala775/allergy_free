@@ -38,7 +38,7 @@ class _ProfileScreen extends State<ProfileScreen> {
       ),
       title: const Text(
         "Are you sure you want to log out?",
-        style: CustomTextStyles.popupTitle,
+        style: CustomTextStyles.greyPopupTitle,
         textAlign: TextAlign.center,
       ),
       content: SizedBox(
@@ -73,16 +73,15 @@ class _ProfileScreen extends State<ProfileScreen> {
                         context.pushNamed(LoginScreen.screenName); // Navegar al login
                       },
                     ),
-                ),
-              ],
-            ),
-          ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
-      // Eliminamos la propiedad "actions" ya que ahora usamos el content
-    ),
-  );
-}
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
