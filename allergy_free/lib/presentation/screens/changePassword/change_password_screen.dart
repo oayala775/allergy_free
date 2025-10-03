@@ -32,12 +32,8 @@ class _ChangePasswordContent extends StatelessWidget {
           physics: const AlwaysScrollableScrollPhysics(),
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: constraints.maxHeight,
-            ),
-            child: const IntrinsicHeight(
-              child: ChangePasswordForm(),
-            ),
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
+            child: const IntrinsicHeight(child: ChangePasswordForm()),
           ),
         );
       },
@@ -93,9 +89,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
               onPressed: _changePassword,
               customTextStyle: CustomTextStyles.whiteText700,
             ),
-            const Flexible(
-              child: SizedBox(height: 20),
-            ),
+            const Flexible(child: SizedBox(height: 20)),
           ],
         ),
       ),
@@ -105,7 +99,7 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
   void _changePassword() {
     // Hide keyboard when button is pressed
     FocusScope.of(context).unfocus();
-    
+
     // TODO: Validate forms and implement password change logic
     // if (_formKey.currentState?.validate() ?? false) {
     //   // Form is valid, proceed with password change
