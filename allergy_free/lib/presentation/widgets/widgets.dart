@@ -7,3 +7,4 @@ export 'package:allergy_free/presentation/widgets/custom_text_field.dart';
 export 'package:allergy_free/presentation/widgets/logo.dart';
 export 'package:allergy_free/presentation/widgets/navbar.dart';
 export 'package:allergy_free/presentation/widgets/popup_one_button.dart';
+export 'package:allergy_free/presentation/widgets/popup_two_button.dart';

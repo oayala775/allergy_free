@@ -23,63 +23,17 @@ class _ProfileScreen extends State<ProfileScreen> {
     'Walnut', // Actualizado a inglés
   ];
 
-  // Función para mostrar el diálogo de confirmación de cierre de sesión
+  // Función para mostrar el diálogo de confirmación de cierre de sesión  void _showLogoutDialog(BuildContext context) {
   void _showLogoutDialog(BuildContext context) {
-  final screenSize = MediaQuery.of(context).size;
-  final screenWidth = screenSize.width;
-  final screenHeight = screenSize.height;
-  
-  showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (context) => AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50.0),
-      ),
-      title: const Text(
-        "Are you sure you want to log out?",
-        style: CustomTextStyles.greyPopupTitle,
-        textAlign: TextAlign.center,
-      ),
-      content: SizedBox(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                // Botón Cancelar
-                SizedBox(
-                   // Mitad del ancho del diálogo menos un pequeño margen
-                  child:  CustomTextButton(
-                      text: 'No',
-                      width: screenWidth * 0.25, //
-                      height: screenHeight * 0.07,
-                      customTextStyle: CustomTextStyles.blackText700, // O el estilo que prefieras
-                      backgroundColor: Colors.grey, // Color para el botón cancelar
-                      onPressed: () => context.pop(),
-                    ),
-                ),
-                // Botón Aceptar
-                SizedBox(
-                   
-                  child: CustomTextButton(
-                      text: 'Yes',
-                      width: screenWidth * 0.25, 
-                      height: screenHeight * 0.07,
-                      customTextStyle: CustomTextStyles.whiteText700,
-                      backgroundColor: CustomColors.primary,
-                      onPressed: () {
-                        context.pop(); // Cerrar el diálogo
-                        context.pushNamed(LoginScreen.screenName); // Navegar al login
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+    ConfirmationDialog.show(
+      context: context,
+      title: "Are you sure you want to log out?",
+      titleStyle: CustomTextStyles.greyPopupTitle, // Solo esto personalizas
+      onConfirm: () {
+        // Navegar al login después de confirmar
+        context.pushNamed(LoginScreen.screenName);
+      },
+      onCancel: () => Navigator.of(context).pop(), 
     );
   }
 
