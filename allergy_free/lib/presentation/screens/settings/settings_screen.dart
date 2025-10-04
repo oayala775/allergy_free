@@ -9,6 +9,20 @@ class SettingsScreen extends StatelessWidget {
   static const String screenName = "settings_screen";
   const SettingsScreen({super.key});
 
+  // Función para mostrar el diálogo de confirmación de cierre de sesión  void _showLogoutDialog(BuildContext context) {
+  void _showLogoutDialog(BuildContext context) {
+    ConfirmationDialog.show(
+      context: context,
+      title: "Are you sure you want to log out?",
+      titleStyle: CustomTextStyles.greyPopupTitle, // Solo esto personalizas
+      onConfirm: () {
+        // Navegar al login después de confirmar
+        context.pushNamed(LoginScreen.screenName);
+      },
+      onCancel: () => Navigator.of(context).pop(), 
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,9 +71,7 @@ class SettingsScreen extends StatelessWidget {
             width: 400,
             height: 64,
             customTextStyle: CustomTextStyles.whiteText700,
-            onPressed: () {
-              GoRouter.of(context).pushNamed(LoginScreen.screenName);
-            },
+            onPressed: () => _showLogoutDialog(context),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(vertical: 10.0),
