@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 class CustomTextField extends StatefulWidget {
   final String text; // Texto que se usará como hint del TextField
   final TextInputType inputType; // KeyboardType del TextField
+  final TextEditingController?
+  controller; // Controller para manejar el texto ingresado
   const CustomTextField({
     super.key,
     required this.text,
     required this.inputType,
+    this.controller,
   });
 
   @override
@@ -46,6 +49,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: TextField(
+        controller: widget.controller,
         style: CustomTextStyles.inputText,
         keyboardType: widget.inputType,
         obscureText:
