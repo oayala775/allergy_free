@@ -99,4 +99,22 @@ class CustomTextStyles {
     fontSize: 24,
     fontFamily: "Inter",
   );
+  static const TextStyle greyPopupTitle = TextStyle(
+    color: CustomColors.subtitle,
+    fontWeight: FontWeight.w700,
+    fontSize: 28,
+    fontFamily: "Inter",
+  );
+    static const TextStyle blackText700 = TextStyle(
+    color: CustomColors.subtitle,
+    fontWeight: FontWeight.w700,
+    fontSize: 24,
+    fontFamily: "Inter",
+  );
+  static const TextStyle greenPopupTitle = TextStyle(
+    color: CustomColors.primary,
+    fontWeight: FontWeight.w700,
+    fontSize: 28,
+    fontFamily: "Inter",
+  );
 }
