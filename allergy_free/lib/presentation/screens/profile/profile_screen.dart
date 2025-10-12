@@ -1,23 +1,30 @@
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
+import 'package:allergy_free/presentation/providers/index_provider.dart';
+import 'package:allergy_free/presentation/providers/selected_allergens_provider.dart';
+import 'package:allergy_free/presentation/providers/selected_avatar_provider.dart';
+import 'package:allergy_free/presentation/providers/terms_and_conditions_provider.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import '../../widgets/widgets.dart';
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   static const String screenName = "profile_screen"; //ruta de la pantalla
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreen();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreen();
 }
 
-class _ProfileScreen extends State<ProfileScreen> {
+class _ProfileScreen extends ConsumerState<ProfileScreen> {
   final String _username = 'Usuario_1';
-  final String _avatar = 'assets/images/avatar/19_Celery.png'; // Avatar por defecto
+  final String _avatar =
+      'assets/images/avatar/19_Celery.png'; // Avatar por defecto
 
-  final List<String> alegias = [ // Lista de avatares disponibles
+  final List<String> alegias = [
+    // Lista de avatares disponibles
     'Gluten',
     'Chocolate',
     'Walnut', // Actualizado a inglés
@@ -30,16 +37,20 @@ class _ProfileScreen extends State<ProfileScreen> {
       title: "Are you sure you want to log out?",
       titleStyle: CustomTextStyles.greyPopupTitle, // Solo esto personalizas
       onConfirm: () {
+        ref.read(selectedAvatarProvider.notifier).state =
+            'assets/images/avatar/0_Default.png';
+        ref.read(selectedAllergensProvider.notifier).state = [];
+        ref.read(termsAndConditionsProvider.notifier).state = false;
+        ref.read(navBarIndexProvider.notifier).state = 1;
         // Navegar al login después de confirmar
         context.pushNamed(LoginScreen.screenName);
       },
-      onCancel: () => Navigator.of(context).pop(), 
+      onCancel: () => Navigator.of(context).pop(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
     // Obtener el tamaño de la pantalla
     final screenSize = MediaQuery.of(context).size;
     final screenWidth = screenSize.width;
@@ -53,18 +64,21 @@ class _ProfileScreen extends State<ProfileScreen> {
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: _ProfileScreenContents(
-                screenWidth: screenWidth, 
-                screenHeight: screenHeight, 
-                username: _username, 
-                avatar: _avatar, 
+                screenWidth: screenWidth,
+                screenHeight: screenHeight,
+                username: _username,
+                avatar: _avatar,
                 alegias: alegias,
-                onLogoutPressed: () => _showLogoutDialog(context), // Pasar la función como callback
+                onLogoutPressed:
+                    () => _showLogoutDialog(
+                      context,
+                    ), // Pasar la función como callback
               ),
             ),
           );
         },
       ),
-    bottomNavigationBar: const Navbar(),
+      bottomNavigationBar: const Navbar(),
     );
   }
 }
@@ -77,7 +91,8 @@ class _ProfileScreenContents extends StatelessWidget {
     required String avatar,
     required this.alegias,
     required this.onLogoutPressed,
-  }) : _username = username, _avatar = avatar;
+  }) : _username = username,
+       _avatar = avatar;
 
   final double screenWidth;
   final double screenHeight;
@@ -95,15 +110,31 @@ class _ProfileScreenContents extends StatelessWidget {
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center, // Centrar verticalmente
-        crossAxisAlignment: CrossAxisAlignment.stretch, // Estirar horizontalmente?
+        crossAxisAlignment:
+            CrossAxisAlignment.stretch, // Estirar horizontalmente?
         children: [
-          const Text("Your profile", style: CustomTextStyles.title, textAlign: TextAlign.center,),
-          SizedBox(height: screenHeight * 0.02), // Espacio entre el título y el avatar
-    
-          _ProfileCard(context, _username, _avatar, screenWidth, screenHeight, alegias),
-    
-          SizedBox(height: screenHeight * 0.01), // Espacio entre el título y el avatar
-    
+          const Text(
+            "Your profile",
+            style: CustomTextStyles.title,
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(
+            height: screenHeight * 0.02,
+          ), // Espacio entre el título y el avatar
+
+          _ProfileCard(
+            context,
+            _username,
+            _avatar,
+            screenWidth,
+            screenHeight,
+            alegias,
+          ),
+
+          SizedBox(
+            height: screenHeight * 0.01,
+          ), // Espacio entre el título y el avatar
+
           CustomTextButton(
             text: 'Edit Profile',
             width: double.infinity,
@@ -113,7 +144,7 @@ class _ProfileScreenContents extends StatelessWidget {
               //TODO: Navegar a la pantalla de edición de perfil
             },
           ),
-    
+
           CustomTextButton(
             text: 'Change Password',
             width: double.infinity,
@@ -123,7 +154,7 @@ class _ProfileScreenContents extends StatelessWidget {
               context.pushNamed(ChangePasswordScreen.screenName);
             },
           ),
-    
+
           CustomTextButton(
             text: 'Log Out',
             width: double.infinity,
@@ -137,10 +168,17 @@ class _ProfileScreenContents extends StatelessWidget {
   }
 }
 
-Widget _ProfileCard(BuildContext context, String username, String avatar, double screenWidth, double screenHeight, List<String> alergias) {
+Widget _ProfileCard(
+  BuildContext context,
+  String username,
+  String avatar,
+  double screenWidth,
+  double screenHeight,
+  List<String> alergias,
+) {
   // Calculamos el radio del avatar
   double avatarRadius = screenWidth * 0.20;
-  
+
   return Center(
     child: SizedBox(
       width: screenWidth * 0.86, // Ancho del card
@@ -149,7 +187,9 @@ Widget _ProfileCard(BuildContext context, String username, String avatar, double
         children: [
           // Card verde (con margen superior para el avatar)
           Container(
-            margin: EdgeInsets.only(top: avatarRadius), // Margen para el espacio del avatar
+            margin: EdgeInsets.only(
+              top: avatarRadius,
+            ), // Margen para el espacio del avatar
             child: Card(
               color: CustomColors.primary,
               shape: RoundedRectangleBorder(
@@ -157,7 +197,9 @@ Widget _ProfileCard(BuildContext context, String username, String avatar, double
               ),
               child: Padding(
                 padding: EdgeInsets.only(
-                  top: avatarRadius + screenHeight * 0.02, // Espacio adicional para el avatar
+                  top:
+                      avatarRadius +
+                      screenHeight * 0.02, // Espacio adicional para el avatar
                   left: screenWidth * 0.05,
                   right: screenWidth * 0.05,
                   bottom: screenWidth * 0.05,
@@ -171,7 +213,7 @@ Widget _ProfileCard(BuildContext context, String username, String avatar, double
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: screenHeight * 0.01),
-                    
+
                     // Tarjeta para la lista de alergias (fondo blanco)
                     Card(
                       color: Colors.white,
@@ -210,7 +252,7 @@ Widget _ProfileCard(BuildContext context, String username, String avatar, double
               ),
             ),
           ),
-          
+
           // Avatar posicionado en la parte superior
           Positioned(
             top: 0, // Colocamos el avatar en la parte superior
@@ -218,7 +260,8 @@ Widget _ProfileCard(BuildContext context, String username, String avatar, double
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: CustomColors.primary, // Borde del mismo color que la card
+                  color:
+                      CustomColors.primary, // Borde del mismo color que la card
                   width: 5.0,
                 ),
               ),
