@@ -1,10 +1,9 @@
-export 'package:allergy_free/presentation/screens/termsAndConditions/terms_and_conditions_screen.dart';
 export 'package:allergy_free/presentation/screens/changePassword/change_password_screen.dart';
 export 'package:allergy_free/presentation/screens/home/home_screen.dart';
-export 'package:allergy_free/presentation/screens/profile/profile_screen.dart';
-export 'package:allergy_free/presentation/screens/settings/settings_screen.dart';
-export 'package:allergy_free/presentation/screens/transition/transition_screen.dart';
-export 'package:allergy_free/presentation/screens/signUp/sign_up_screen.dart';
 export 'package:allergy_free/presentation/screens/login/login_screen.dart';
+export 'package:allergy_free/presentation/screens/profile/profile_screen.dart';
 export 'package:allergy_free/presentation/screens/selectAvatar/select_avatar_screen.dart';
-
+export 'package:allergy_free/presentation/screens/settings/settings_screen.dart';
+export 'package:allergy_free/presentation/screens/signUp/sign_up_screen.dart';
+export 'package:allergy_free/presentation/screens/termsAndConditions/terms_and_conditions_screen.dart';
+export 'package:allergy_free/presentation/screens/transition/transition_screen.dart';

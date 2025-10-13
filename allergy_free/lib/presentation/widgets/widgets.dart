@@ -4,6 +4,7 @@ export 'package:allergy_free/presentation/widgets/appbar.dart';
 export 'package:allergy_free/presentation/widgets/back_arrow_button.dart';
 export 'package:allergy_free/presentation/widgets/custom_text_button.dart';
 export 'package:allergy_free/presentation/widgets/custom_text_field.dart';
+export 'package:allergy_free/presentation/widgets/default_avatar.dart';
 export 'package:allergy_free/presentation/widgets/logo.dart';
 export 'package:allergy_free/presentation/widgets/navbar.dart';
 export 'package:allergy_free/presentation/widgets/popup_one_button.dart';

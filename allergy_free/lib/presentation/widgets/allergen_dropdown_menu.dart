@@ -1,10 +1,12 @@
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
+import 'package:allergy_free/presentation/providers/selected_allergens_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 // Widget que muestra un menú desplegable para seleccionar alérgenos.
-class AllergenDropdownMenu extends StatefulWidget {
+class AllergenDropdownMenu extends ConsumerStatefulWidget {
   final double width;
   final double height;
 
@@ -15,11 +17,11 @@ class AllergenDropdownMenu extends StatefulWidget {
   });
 
   @override
-  State<AllergenDropdownMenu> createState() => _AllergenDropdownMenuState();
+  ConsumerState<AllergenDropdownMenu> createState() => _AllergenDropdownMenuState();
 }
 
 // Estado del widget AllergenDropdownMenu que maneja la lógica de selección de alérgenos.
-class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
+class _AllergenDropdownMenuState extends ConsumerState<AllergenDropdownMenu> {
   // Lista de alérgenos disponibles para seleccionar.
   final List<String> allergenList = [
     'Almond',
@@ -45,10 +47,11 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
   ];
 
   // Lista para almacenar los alérgenos seleccionados por el usuario.
-  List<String> selectedAllergens = [];
+  // List<String> selectedAllergens = [];
 
   @override
   Widget build(BuildContext context) {
+    final List<String> selectedAllergens = ref.watch(selectedAllergensProvider);
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -106,9 +109,11 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
                       deleteIconColor: Colors.white,
                       labelStyle: CustomTextStyles.whiteTextChip,
                       onDeleted: () {
-                        setState(() {
-                          selectedAllergens.remove(allergen);
-                        });
+                        final currentList = ref.read(selectedAllergensProvider);
+                        ref.read(selectedAllergensProvider.notifier).state = [
+                          for (final item in currentList)
+                            if (item != allergen) item,
+                        ];
                       },
                     );
                   }).toList(),
@@ -178,6 +183,7 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
 
   //Dialogo de selección múltiple
   void _showMultiSelectDialog(BuildContext context) {
+    final selectedAllergens = ref.read(selectedAllergensProvider);
     showDialog(
       context: context,
       builder: (ctx) {
@@ -189,11 +195,9 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
                   )
                   .toList(),
           initialValue: selectedAllergens,
-          title: const Expanded(
-            child: Text(
-              "Select your allergens",
-              style: CustomTextStyles.greyedText,
-            ),
+          title: Text(
+            "Select your allergens",
+            style: CustomTextStyles.greyedText,
           ),
           searchable: true,
           searchIcon: const Icon(Icons.search, color: CustomColors.greyLetters),
@@ -223,7 +227,9 @@ class _AllergenDropdownMenuState extends State<AllergenDropdownMenu> {
               }
             }
             // Actualizar estado
-            setState(() => selectedAllergens = newSelected);
+            ref.read(selectedAllergensProvider.notifier).state = newSelected;
+            print(selectedAllergens);
+            // setState(() => selectedAllergens = newSelected);
           },
         );
       },

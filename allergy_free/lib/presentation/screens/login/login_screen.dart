@@ -184,7 +184,7 @@ class _FormularyState extends State<Formulary> {
       final user = await DatabaseOperations().login(username, password);
       if (user != null) {
         // Login successful, navigate to home screen
-        // context.pushNamed(HomeScreen.screenName);
+        context.pushNamed(HomeScreen.screenName);
         print('valido');
       } else {
         // Login failed, show error message
