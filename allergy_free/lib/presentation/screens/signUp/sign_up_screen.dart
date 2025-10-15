@@ -45,6 +45,17 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   }
 
   bool _isPasswordValid(String password) {
+    final RegExp passwordRegex = RegExp(r'^[^\s,<>;]+$');
+    if (!passwordRegex.hasMatch(password)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Please enter a valid password, no spaces, commas, greater than, lower than and semicolons are allowed',
+          ),
+        ),
+      );
+      return false; // Stop the function
+    }
     final reenterPassword = _reenterPasswordController.text;
     if (password.isEmpty || reenterPassword.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -139,6 +150,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
       final wasRegistered = await DatabaseOperations().register(user);
       print(wasRegistered);
+      ref.read(selectedAvatarProvider.notifier).state =
+          'assets/images/avatar/0_Default.png';
+      ref.read(selectedAllergensProvider.notifier).state = [];
+      ref.read(termsAndConditionsProvider.notifier).state = false;
     } catch (e) {
       print('Error en login: $e');
     }
