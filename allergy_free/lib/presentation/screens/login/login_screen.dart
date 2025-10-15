@@ -1,8 +1,10 @@
 import 'package:allergy_free/database/database_operations.dart';
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
+import 'package:allergy_free/presentation/providers/user_provider.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
 import '../../widgets/widgets.dart';
@@ -154,15 +156,15 @@ class Icon extends StatelessWidget {
   }
 }
 
-class Formulary extends StatefulWidget {
+class Formulary extends ConsumerStatefulWidget {
   const Formulary({super.key});
   // Queda pendiente la validación del formulario y el manejo de errores
 
   @override
-  State<Formulary> createState() => _FormularyState();
+  ConsumerState<Formulary> createState() => _FormularyState();
 }
 
-class _FormularyState extends State<Formulary> {
+class _FormularyState extends ConsumerState<Formulary> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -177,15 +179,15 @@ class _FormularyState extends State<Formulary> {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
 
-    print('Username: $username');
-    print('Password: $password');
-
     try {
       final user = await DatabaseOperations().login(username, password);
       if (user != null) {
-        // Login successful, navigate to home screen
-        context.pushNamed(HomeScreen.screenName);
-        print('valido');
+        ref.read(userProvider.notifier).state = user;
+        GoRouter.of(context).pushNamed(HomeScreen.screenName);
+        print(ref.read(userProvider.notifier).state.username);
+        print(ref.read(userProvider.notifier).state.password);
+        print(ref.read(userProvider.notifier).state.id);
+        print(ref.read(userProvider.notifier).state.avatarId);
       } else {
         // Login failed, show error message
         print('Invalid username or password');

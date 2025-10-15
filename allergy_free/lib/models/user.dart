@@ -13,6 +13,13 @@ class User {
     required this.avatarId,
   });
 
+  User.empty():
+    id = 0,
+    avatarId = 0,
+    age = 0,
+    username = '',
+    password = '';
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
