@@ -59,25 +59,22 @@ class DatabaseHelper {
 
     await db.execute('''
       CREATE TABLE user_allergies (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER NOT NULL,
         allergy_id INTEGER NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         FOREIGN KEY (allergy_id) REFERENCES allergies(id) ON DELETE CASCADE,
-        UNIQUE(user_id, allergy_id)
+        UNIQUE(user_id, allergy_id),
+        PRIMARY KEY (user_id, allergy_id)
       )
     ''');
 
     await db.execute('''
       CREATE TABLE allergy_ingredients (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        allergy_name TEXT NOT NULL,
-        ingredient_name TEXT NOT NULL,
         allergy_id INTEGER NOT NULL,
         ingredient_id INTEGER NOT NULL,
         FOREIGN KEY (allergy_id) REFERENCES allergies(id) ON DELETE CASCADE,
         FOREIGN KEY (ingredient_id) REFERENCES ingredients(id) ON DELETE CASCADE,
-        UNIQUE(allergy_id, ingredient_id)
+        PRIMARY KEY(allergy_id, ingredient_id)
       )
     ''');
 
@@ -155,10 +152,10 @@ class DatabaseHelper {
       ('Chocolate amargo')
     ''');
 
-    await db.rawInsert('''
-      INSERT INTO users (username, password, age, avatar_id) VALUES 
-      ('jcest28', '1234', 23, 1)
-    ''');
+    // await db.rawInsert('''
+    //   INSERT INTO users (username, password, age, avatar_id) VALUES 
+    //   ('jcest28', '1234', 23, 1)
+    // ''');
   }
 
   Future<void> close() async {

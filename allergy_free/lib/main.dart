@@ -3,11 +3,9 @@ import 'package:allergy_free/database/database_helper.dart';
 import 'package:allergy_free/presentation/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:sqflite/sqflite.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  print("Creando base de datos");
   await DatabaseHelper().database;
   runApp(ProviderScope(child: const MainApp()));
 }

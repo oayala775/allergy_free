@@ -19,7 +19,7 @@ class SettingsScreen extends StatelessWidget {
         // Navegar al login después de confirmar
         context.pushNamed(LoginScreen.screenName);
       },
-      onCancel: () => Navigator.of(context).pop(), 
+      onCancel: () => Navigator.of(context).pop(),
     );
   }
 
@@ -58,7 +58,7 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
           CustomTextButton(
-            text: 'Change password',
+            text: 'Change Password',
             width: 400,
             height: 64,
             customTextStyle: CustomTextStyles.whiteText700,
@@ -67,7 +67,7 @@ class SettingsScreen extends StatelessWidget {
             },
           ),
           CustomTextButton(
-            text: 'Logout',
+            text: 'Log Out',
             width: 400,
             height: 64,
             customTextStyle: CustomTextStyles.whiteText700,

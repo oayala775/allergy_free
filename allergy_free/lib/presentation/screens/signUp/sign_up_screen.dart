@@ -1,5 +1,7 @@
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
+import 'package:allergy_free/config/utils/functions/functions.dart';
 import 'package:allergy_free/database/database_operations.dart';
+import 'package:allergy_free/models/allergy.dart';
 import 'package:allergy_free/models/user.dart';
 import 'package:allergy_free/presentation/providers/selected_allergens_provider.dart';
 import 'package:allergy_free/presentation/providers/selected_avatar_provider.dart';
@@ -8,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../widgets/widgets.dart';
+import 'package:allergy_free/presentation/widgets/widgets.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   static const String screenName = "sign_up_screen";
@@ -27,7 +29,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   @override
   void initState() {
     super.initState();
-    // Step 3: Initialize the controllers in initState.
     _usernameController = TextEditingController();
     _passwordController = TextEditingController();
     _reenterPasswordController = TextEditingController();
@@ -36,7 +37,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   void dispose() {
-    // Step 4: Dispose of the controllers to prevent memory leaks.
     _usernameController.dispose();
     _passwordController.dispose();
     _reenterPasswordController.dispose();
@@ -44,91 +44,54 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     super.dispose();
   }
 
-  bool _isPasswordValid(String password) {
-    final RegExp passwordRegex = RegExp(r'^[^\s,<>;]+$');
-    if (!passwordRegex.hasMatch(password)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Please enter a valid password, no spaces, commas, greater than, lower than and semicolons are allowed',
-          ),
-        ),
-      );
-      return false; // Stop the function
+  String? _validateUsername(String username) {
+    final RegExp usernameRegex = RegExp(r'^[a-zA-Z0-9]+$');
+    if (username.isEmpty) {
+      return 'Please enter a username.';
     }
-    final reenterPassword = _reenterPasswordController.text;
-    if (password.isEmpty || reenterPassword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter your password')),
-      );
-      return false; // Stop the function
+    if (!usernameRegex.hasMatch(username)) {
+      return 'Username must only contain letters and numbers.';
     }
-    if (password != reenterPassword) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Passwords do not match.')));
-      return false; // Stop the function
-    }
-    return true;
+    return null;
   }
 
-  bool _isAgeValid(String age) {
+  String? _validateAge(String age) {
     final RegExp ageRegex = RegExp(r'^[0-9]{1,2}$');
     if (age.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Age must be included.')));
-      return false; // Stop the function
+      return 'Age must be included.';
     }
     if (!ageRegex.hasMatch(age)) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Age must be valid.')));
-      return false;
+      return 'Age must be a valid number.';
     }
 
-    int ageValue = int.parse(age);
-    if (ageValue < 5) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Age must be valid.')));
-      return false;
+    int? ageValue = int.tryParse(age);
+    if (ageValue == null || ageValue < 5) {
+      return 'Age must be 5 or older.';
     }
-    return true;
+    return null;
   }
 
-  bool _isUsernameValid(String username) {
-    final RegExp usernameRegex = RegExp(r'^[a-zA-Z0-9]+$');
-    if (!usernameRegex.hasMatch(username)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Username must not contain special characters or spaces, just letters and numbers.',
-          ),
-        ),
-      );
-      return false;
-    }
-    return true;
-  }
-
-  Future<bool> _insertToDatabase(
+  Future<bool> _registerUser(
     String username,
     String password,
     String age,
+    List<Allergy> selectedAllergens,
   ) async {
     try {
-      final selectedAvatar = ref.watch(selectedAvatarProvider);
+      // * Avatar verification
+      final selectedAvatar = ref.read(selectedAvatarProvider);
       final avatarInstance = await DatabaseOperations().retrieveAvatarID(
         selectedAvatar,
       );
-      if (avatarInstance == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('An error occurred accessing the avatar ID.')),
-        );
+      if (avatarInstance == null || avatarInstance.id == null) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error retrieving avatar')));
         return false;
       }
-      int avatarId = avatarInstance.id ?? 0;
+      int avatarId = avatarInstance.id!;
+
+      // * Checks if user already exists
       final existingUser = await DatabaseOperations().verifyIfUserExist(
         username,
       );
@@ -139,17 +102,37 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             content: Text('$username is already taken, please change it.'),
           ),
         );
-        return false; // Stop the function
+        return false;
       }
+
+      // * Hashing the password
+      final String passwordHashed = hashPassword(password);
+
       final User user = User(
         username: username,
-        password: password,
+        password: passwordHashed,
         age: int.parse(age),
         avatarId: avatarId,
       );
 
-      final wasRegistered = await DatabaseOperations().register(user);
-      print(wasRegistered);
+      final newUserId = await DatabaseOperations().insertUser(user);
+      if (newUserId == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to create user account.')),
+        );
+        return false;
+      }
+      for (final allergy in selectedAllergens) {
+        int? allergyIdToLink;
+        if (allergy.id != null) {
+          allergyIdToLink = allergy.id;
+        }
+        await DatabaseOperations().insertUserAllergy(
+          newUserId,
+          allergyIdToLink!,
+        );
+      }
+
       ref.read(selectedAvatarProvider.notifier).state =
           'assets/images/avatar/0_Default.png';
       ref.read(selectedAllergensProvider.notifier).state = [];
@@ -162,20 +145,33 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   void _signUp() async {
     final bool acceptedTerms = ref.read(termsAndConditionsProvider);
-    final List<String> selectedAllergens = ref.read(selectedAllergensProvider);
+    final List<Allergy> selectedAllergens = ref.read(selectedAllergensProvider);
     final username = _usernameController.text;
     final password = _passwordController.text;
+    final reenterPassword = _reenterPasswordController.text;
     final age = _ageController.text;
 
-    if (!_isUsernameValid(username)) {
+    final String? usernameError = _validateUsername(username);
+    if (usernameError != null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(usernameError)));
       return;
     }
 
-    if (!_isPasswordValid(password)) {
+    final String? passwordError = validatePassword(password, reenterPassword);
+    if (passwordError != null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(passwordError)));
       return;
     }
 
-    if (!_isAgeValid(age)) {
+    final String? ageError = _validateAge(age);
+    if (ageError != null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(ageError)));
       return;
     }
 
@@ -196,12 +192,47 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       return;
     }
 
-    final return_value = await _insertToDatabase(username, password, age);
-    if (return_value) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Successfully inserted to database')),
+    final registrationSuccess = await _registerUser(
+      username,
+      password,
+      age,
+      selectedAllergens,
+    );
+    if (registrationSuccess && mounted) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder:
+            (ctx) => CustomDialog(
+              title: 'Registration successful',
+              titleStyle: CustomTextStyles.greenLogin,
+              message: 'Your account was created successfully',
+              messageStyle: CustomTextStyles.inputText,
+              buttonText: 'OK',
+              buttonColor: Colors.grey,
+
+              onButtonPressed:
+                  () => GoRouter.of(context).goNamed("login_screen"),
+            ),
       );
-      GoRouter.of(context).goNamed("login_screen");
+    } else {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder:
+            (ctx) => CustomDialog(
+              title: 'Something went wrong',
+              titleStyle: CustomTextStyles.greenLogin,
+              message:
+                  'There was an error while creating your account. Check your connection or try again later.',
+              messageStyle: CustomTextStyles.inputText,
+              buttonText: 'OK',
+              buttonColor: Colors.grey,
+
+              onButtonPressed:
+                  () => GoRouter.of(context).goNamed("login_screen"),
+            ),
+      );
     }
   }
 

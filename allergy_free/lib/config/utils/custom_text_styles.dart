@@ -86,6 +86,12 @@ class CustomTextStyles {
     fontSize: 20,
     fontFamily: "Inter",
   );
+  static const TextStyle warningText600 = TextStyle(
+    color: Colors.red,
+    fontWeight: FontWeight.w600,
+    fontSize: 20,
+    fontFamily: "Inter",
+  );
   static const TextStyle bulletPoint = TextStyle(
     color: Colors.black,
     fontWeight: FontWeight.w400,
@@ -105,9 +111,15 @@ class CustomTextStyles {
     fontSize: 28,
     fontFamily: "Inter",
   );
-    static const TextStyle blackText700 = TextStyle(
+  static const TextStyle blackText700 = TextStyle(
     color: CustomColors.subtitle,
     fontWeight: FontWeight.w700,
+    fontSize: 24,
+    fontFamily: "Inter",
+  );
+  static const TextStyle blackText600 = TextStyle(
+    color: CustomColors.subtitle,
+    fontWeight: FontWeight.w600,
     fontSize: 24,
     fontFamily: "Inter",
   );

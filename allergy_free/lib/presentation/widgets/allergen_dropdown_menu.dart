@@ -1,8 +1,9 @@
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
-import 'package:allergy_free/presentation/providers/selected_allergens_provider.dart';
-import 'package:flutter/material.dart';
+import 'package:allergy_free/models/allergy.dart';
+import 'package:allergy_free/presentation/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 // Widget que muestra un menú desplegable para seleccionar alérgenos.
@@ -17,41 +18,20 @@ class AllergenDropdownMenu extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<AllergenDropdownMenu> createState() => _AllergenDropdownMenuState();
+  ConsumerState<AllergenDropdownMenu> createState() =>
+      _AllergenDropdownMenuState();
 }
 
 // Estado del widget AllergenDropdownMenu que maneja la lógica de selección de alérgenos.
 class _AllergenDropdownMenuState extends ConsumerState<AllergenDropdownMenu> {
-  // Lista de alérgenos disponibles para seleccionar.
-  final List<String> allergenList = [
-    'Almond',
-    'Celery',
-    'Peanut',
-    'Chocolate',
-    'Strawberry',
-    'Gluten',
-    'Egg',
-    'Kiwi',
-    'Milk',
-    'Apple',
-    'Shellfish',
-    'Walnut',
-    'Cashew',
-    'Fish',
-    'Pistachio',
-    'Sesame',
-    'Soy',
-    'Tomato',
-    'Wheat',
-    'Other (specify)',
-  ];
-
-  // Lista para almacenar los alérgenos seleccionados por el usuario.
-  // List<String> selectedAllergens = [];
-
   @override
   Widget build(BuildContext context) {
-    final List<String> selectedAllergens = ref.watch(selectedAllergensProvider);
+    final AsyncValue<List<Allergy>> systemAllergies = ref.watch(
+      systemAllergiesProvider,
+    );
+    final List<Allergy> selectedAllergens = ref.watch(
+      selectedAllergensProvider,
+    );
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -61,7 +41,13 @@ class _AllergenDropdownMenuState extends ConsumerState<AllergenDropdownMenu> {
               width: widget.width,
               height: widget.height,
               child: InkWell(
-                onTap: () => _showMultiSelectDialog(context),
+                onTap:
+                    systemAllergies.hasValue
+                        ? () => _showMultiSelectDialog(
+                          context,
+                          systemAllergies.value!,
+                        )
+                        : null,
                 borderRadius: BorderRadius.circular(50),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -69,24 +55,59 @@ class _AllergenDropdownMenuState extends ConsumerState<AllergenDropdownMenu> {
                     borderRadius: BorderRadius.circular(50),
                     border: Border.all(color: CustomColors.primary, width: 4),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const SizedBox(width: 8),
-                      const Expanded(
-                        child: Text(
-                          "Select allergens",
-                          style: CustomTextStyles.greyedText,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                      ),
-                      const Icon(
-                        Icons.arrow_drop_down,
-                        color: CustomColors.greyLetters,
-                        size: 30,
-                      ),
-                    ],
+                  child: systemAllergies.when(
+                    data: (allergies) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const SizedBox(width: 8),
+                          const Expanded(
+                            child: Text(
+                              "Select allergens",
+                              style: CustomTextStyles.greyedText,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
+                          const Icon(
+                            Icons.arrow_drop_down,
+                            color: CustomColors.greyLetters,
+                            size: 30,
+                          ),
+                        ],
+                      );
+                    },
+                    error: (err, stack) {
+                      // Estado de error: Muestra un mensaje
+                      return const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.error_outline, color: Colors.red),
+                          SizedBox(width: 16),
+                          Text(
+                            "Could not load allergens",
+                            style: CustomTextStyles.greyedText,
+                          ),
+                        ],
+                      );
+                    },
+                    loading: () {
+                      return const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                          SizedBox(width: 16),
+                          Text(
+                            "Loading allergens...",
+                            style: CustomTextStyles.greyedText,
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               ),
@@ -104,16 +125,19 @@ class _AllergenDropdownMenuState extends ConsumerState<AllergenDropdownMenu> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(50),
                       ),
-                      label: Text(allergen),
+                      label: Text(allergen.allergyName),
                       backgroundColor: CustomColors.primary,
                       deleteIconColor: Colors.white,
                       labelStyle: CustomTextStyles.whiteTextChip,
                       onDeleted: () {
                         final currentList = ref.read(selectedAllergensProvider);
-                        ref.read(selectedAllergensProvider.notifier).state = [
-                          for (final item in currentList)
-                            if (item != allergen) item,
-                        ];
+                        ref.read(selectedAllergensProvider.notifier).state =
+                            currentList
+                                .where(
+                                  (item) =>
+                                      item.allergyName != allergen.allergyName,
+                                )
+                                .toList();
                       },
                     );
                   }).toList(),
@@ -182,54 +206,70 @@ class _AllergenDropdownMenuState extends ConsumerState<AllergenDropdownMenu> {
   }
 
   //Dialogo de selección múltiple
-  void _showMultiSelectDialog(BuildContext context) {
+  void _showMultiSelectDialog(BuildContext context, List<Allergy> allergyList) {
     final selectedAllergens = ref.read(selectedAllergensProvider);
+    final List<MultiSelectItem<Object>> items =
+        allergyList
+            .map(
+              // 2. Mapeamos cada 'allergy' (objeto) a un MultiSelectItem<Object>
+              (allergy) => MultiSelectItem<Object>(
+                allergy, // El valor es el objeto Allergy completo
+                allergy.allergyName, // La etiqueta es el nombre
+              ),
+            )
+            .toList();
+    items.add(MultiSelectItem<String>('Other (specify)', 'Other (specify)'));
     showDialog(
       context: context,
       builder: (ctx) {
         return MultiSelectDialog(
-          items:
-              allergenList
-                  .map(
-                    (alergeno) => MultiSelectItem<String>(alergeno, alergeno),
-                  )
-                  .toList(),
+          items: items,
           initialValue: selectedAllergens,
-          title: Text(
-            "Select your allergens",
-            style: CustomTextStyles.greyedText,
+          title: Flexible(
+            child: Text(
+              "Select your allergens",
+              style: CustomTextStyles.greyedText,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           ),
           searchable: true,
           searchIcon: const Icon(Icons.search, color: CustomColors.greyLetters),
           selectedColor: CustomColors.primary,
           checkColor: Colors.white,
           onConfirm: (values) async {
-            List<String> newSelected = List.from(values.cast<String>());
+            final List<Allergy> newSelected = [];
 
-            // Verificar si seleccionó "Otro"
-            if (newSelected.contains('Other (specify)')) {
-              // Remover opción temporal
-              newSelected.remove('Other (specify)');
+            for (final item in values) {
+              if (item is Allergy) {
+                newSelected.add(item);
+              }
 
-              // Mostrar diálogo personalizado
-              String? customAllergen = await _showCustomAllergenDialog(context);
+              if (item is String && item == 'Other (specify)') {
+                String? customAllergen = await _showCustomAllergenDialog(
+                  context,
+                );
 
-              //Verificar si se ingresó un alérgeno personalizado
-              if (customAllergen != null && customAllergen.isNotEmpty) {
-                String customAllergenNormalized =
-                    customAllergen[0].toUpperCase() +
-                    customAllergen.substring(1).toLowerCase();
+                if (customAllergen != null && customAllergen.isNotEmpty) {
+                  String customAllergenNormalized =
+                      customAllergen[0].toUpperCase() +
+                      customAllergen.substring(1).toLowerCase();
 
-                // Agrega el alergeno personalizado a la lista
-                if (!newSelected.contains(customAllergenNormalized)) {
-                  newSelected.add(customAllergenNormalized);
+                  final tempAllergy = Allergy(
+                    id: null,
+                    allergyName: customAllergenNormalized,
+                    description: "Custom allergen",
+                  );
+
+                  if (!newSelected.any(
+                    (a) => a.allergyName == tempAllergy.allergyName,
+                  )) {
+                    newSelected.add(tempAllergy);
+                  }
                 }
               }
             }
-            // Actualizar estado
             ref.read(selectedAllergensProvider.notifier).state = newSelected;
-            print(selectedAllergens);
-            // setState(() => selectedAllergens = newSelected);
           },
         );
       },
