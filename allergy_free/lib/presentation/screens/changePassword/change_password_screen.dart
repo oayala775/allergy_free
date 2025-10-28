@@ -1,7 +1,13 @@
-import 'package:allergy_free/config/utils/custom_text_styles.dart';
 import 'package:allergy_free/config/utils/custom_colors.dart';
+import 'package:allergy_free/config/utils/custom_text_styles.dart';
+import 'package:allergy_free/config/utils/functions/hash_passwords.dart';
+import 'package:allergy_free/config/utils/functions/validate_password.dart';
+import 'package:allergy_free/database/database_operations.dart';
+import 'package:allergy_free/models/user.dart';
+import 'package:allergy_free/presentation/providers/providers.dart';
+import 'package:allergy_free/presentation/widgets/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -43,19 +49,39 @@ class _ChangePasswordContent extends StatelessWidget {
   }
 }
 
-class ChangePasswordForm extends StatefulWidget {
+class ChangePasswordForm extends ConsumerStatefulWidget {
   const ChangePasswordForm({super.key});
 
   @override
-  State<ChangePasswordForm> createState() => _ChangePasswordFormState();
+  ConsumerState<ChangePasswordForm> createState() => _ChangePasswordFormState();
 }
 
-class _ChangePasswordFormState extends State<ChangePasswordForm> {
+class _ChangePasswordFormState extends ConsumerState<ChangePasswordForm> {
+  late final TextEditingController _currentPasswordController;
+  late final TextEditingController _newPasswordController;
+  late final TextEditingController _reenterNewPasswordController;
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    _currentPasswordController = TextEditingController();
+    _newPasswordController = TextEditingController();
+    _reenterNewPasswordController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _currentPasswordController.dispose();
+    _newPasswordController.dispose();
+    _reenterNewPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    User user = ref.read(userProvider.notifier).state;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: size.width * 0.06),
@@ -71,17 +97,20 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
-            const CustomTextField(
+            CustomTextField(
               text: "Current Password",
               inputType: TextInputType.visiblePassword,
+              controller: _currentPasswordController,
             ),
-            const CustomTextField(
+            CustomTextField(
               text: "New Password",
               inputType: TextInputType.visiblePassword,
+              controller: _newPasswordController,
             ),
-            const CustomTextField(
+            CustomTextField(
               text: "Confirm New Password",
               inputType: TextInputType.visiblePassword,
+              controller: _reenterNewPasswordController,
             ),
             const SizedBox(height: 20),
             CustomTextButton(
@@ -103,19 +132,20 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => CustomDialog(
-        title: "Password changed successfully",
-        titleStyle: CustomTextStyles.greenPopupTitle,
-        message: "Your new password has been saved.",
-        messageStyle: CustomTextStyles.inputText,
-        buttonText: 'Okey',
-        buttonTextStyle: CustomTextStyles.whiteText700,
-        buttonColor: CustomColors.primary,
-        onButtonPressed: () {
-          // Ir a la pantalla anterior después de cerrar el diálogo
-          GoRouter.of(context).pop();
-        },
-      ),
+      builder:
+          (context) => CustomDialog(
+            title: "Password changed successfully",
+            titleStyle: CustomTextStyles.greenPopupTitle,
+            message: "Your new password has been saved.",
+            messageStyle: CustomTextStyles.inputText,
+            buttonText: 'Accept',
+            buttonTextStyle: CustomTextStyles.whiteText700,
+            buttonColor: CustomColors.primary,
+            onButtonPressed: () {
+              // Ir a la pantalla anterior después de cerrar el diálogo
+              GoRouter.of(context).pop();
+            },
+          ),
     );
   }
 
@@ -124,31 +154,69 @@ class _ChangePasswordFormState extends State<ChangePasswordForm> {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => CustomDialog(
-        title: "Something went wrong",
-        titleStyle: CustomTextStyles.greyPopupTitle,
-        message: "We couldn't update your password. Please try again later.",
-        messageStyle: CustomTextStyles.inputText,
-        buttonText: 'Okey',
-        buttonTextStyle: CustomTextStyles.whiteText700,
-        buttonColor: CustomColors.primary,
-        onButtonPressed: () {
-          // Ir a la pantalla anterior después de cerrar el diálogo
-          GoRouter.of(context).pop();
-        },
-      ),
+      builder:
+          (context) => CustomDialog(
+            title: "Something went wrong",
+            titleStyle: CustomTextStyles.greyPopupTitle,
+            message:
+                "We couldn't update your password. Please try again later.",
+            messageStyle: CustomTextStyles.inputText,
+            buttonText: 'Accept',
+            buttonTextStyle: CustomTextStyles.whiteText700,
+            buttonColor: CustomColors.primary,
+            onButtonPressed: () {
+              // Ir a la pantalla anterior después de cerrar el diálogo
+              GoRouter.of(context).pop();
+            },
+          ),
     );
   }
 
-
-  void _changePassword() {
+  void _changePassword() async {
     // Hide keyboard when button is pressed
     FocusScope.of(context).unfocus();
-    _success(context);
+    User user = ref.read(userProvider.notifier).state;
+    String newPassword = _newPasswordController.text;
+    String reenterPassword = _reenterNewPasswordController.text;
 
-    // TODO: Validate forms and implement password change logic
-    // if (_formKey.currentState?.validate() ?? false) {
-    //   // Form is valid, proceed with password change
-    // }
+    String hashedCurrentPassword = hashPassword(
+      _currentPasswordController.text,
+    );
+
+    if (hashedCurrentPassword != user.password) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('The entered password does not match the current one.'),
+        ),
+      );
+      return;
+    }
+
+    String? passwordValidationResult = validatePassword(
+      newPassword,
+      reenterPassword,
+    );
+    if (passwordValidationResult != null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(passwordValidationResult)));
+      return;
+    }
+
+    String newPasswordHashed = hashPassword(_newPasswordController.text);
+    User updatedUser = User(
+      id: user.id,
+      username: user.username,
+      password: newPasswordHashed,
+      age: user.age,
+      avatarId: user.avatarId,
+    );
+    int? result = await DatabaseOperations().updateUser(updatedUser);
+    if ((result ?? 0) > 0) {
+      ref.read(userProvider.notifier).state = updatedUser;
+      _success(context);
+    } else {
+      _error(context);
+    }
   }
 }

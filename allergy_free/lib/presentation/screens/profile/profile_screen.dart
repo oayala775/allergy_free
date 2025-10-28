@@ -1,13 +1,14 @@
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
-import 'package:allergy_free/presentation/providers/index_provider.dart';
-import 'package:allergy_free/presentation/providers/selected_allergens_provider.dart';
-import 'package:allergy_free/presentation/providers/selected_avatar_provider.dart';
-import 'package:allergy_free/presentation/providers/terms_and_conditions_provider.dart';
+import 'package:allergy_free/database/database_operations.dart';
+import 'package:allergy_free/models/allergy.dart';
+import 'package:allergy_free/models/avatar.dart';
+import 'package:allergy_free/models/user.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:allergy_free/config/utils/custom_colors.dart';
+import '../../providers/providers.dart';
 import '../../widgets/widgets.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -19,17 +20,6 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreen extends ConsumerState<ProfileScreen> {
-  final String _username = 'Usuario_1';
-  final String _avatar =
-      'assets/images/avatar/19_Celery.png'; // Avatar por defecto
-
-  final List<String> alegias = [
-    // Lista de avatares disponibles
-    'Gluten',
-    'Chocolate',
-    'Walnut', // Actualizado a inglés
-  ];
-
   // Función para mostrar el diálogo de confirmación de cierre de sesión  void _showLogoutDialog(BuildContext context) {
   void _showLogoutDialog(BuildContext context) {
     ConfirmationDialog.show(
@@ -49,10 +39,20 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
     );
   }
 
+  Future<Avatar?> _getAvatarFromDatabase(User user) async {
+    final String avatarId = user.avatarId.toString();
+    final Avatar? avatar = await DatabaseOperations().retrieveAvatar(avatarId);
+    return avatar;
+  }
+
   @override
   Widget build(BuildContext context) {
+    User user = ref.read(userProvider.notifier).state;
+    final String username = user.username;
     // Obtener el tamaño de la pantalla
     final screenSize = MediaQuery.of(context).size;
+    final List<Allergy> alergias =
+        ref.read(selectedAllergensProvider.notifier).state;
     final screenWidth = screenSize.width;
     final screenHeight = screenSize.height;
 
@@ -60,21 +60,52 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
       appBar: const Appbar(), // Barra de navegación personalizada
       body: LayoutBuilder(
         builder: (context, constraints) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraints.maxHeight),
-              child: _ProfileScreenContents(
-                screenWidth: screenWidth,
-                screenHeight: screenHeight,
-                username: _username,
-                avatar: _avatar,
-                alegias: alegias,
-                onLogoutPressed:
-                    () => _showLogoutDialog(
-                      context,
-                    ), // Pasar la función como callback
-              ),
-            ),
+          return FutureBuilder<dynamic>(
+            future: _getAvatarFromDatabase(user),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final String avatarPath =
+                    snapshot.data?.avatarPath ??
+                    'assets/images/avatar/0_Default.png';
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: _ProfileScreenContents(
+                      screenWidth: screenWidth,
+                      screenHeight: screenHeight,
+                      username: username,
+                      avatar: avatarPath,
+                      alergias: alergias,
+                      onLogoutPressed:
+                          () => _showLogoutDialog(
+                            context,
+                          ), // Pasar la función como callback
+                    ),
+                  ),
+                );
+              } else {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: _ProfileScreenContents(
+                      screenWidth: screenWidth,
+                      screenHeight: screenHeight,
+                      username: username,
+                      avatar: 'assets/images/avatar/0_Default.png',
+                      alergias: alergias,
+                      onLogoutPressed:
+                          () => _showLogoutDialog(
+                            context,
+                          ), // Pasar la función como callback
+                    ),
+                  ),
+                );
+              }
+            },
           );
         },
       ),
@@ -89,7 +120,7 @@ class _ProfileScreenContents extends StatelessWidget {
     required this.screenHeight,
     required String username,
     required String avatar,
-    required this.alegias,
+    required this.alergias,
     required this.onLogoutPressed,
   }) : _username = username,
        _avatar = avatar;
@@ -98,7 +129,7 @@ class _ProfileScreenContents extends StatelessWidget {
   final double screenHeight;
   final String _username;
   final String _avatar;
-  final List<String> alegias;
+  final List<Allergy> alergias;
   final VoidCallback onLogoutPressed;
 
   @override
@@ -128,7 +159,7 @@ class _ProfileScreenContents extends StatelessWidget {
             _avatar,
             screenWidth,
             screenHeight,
-            alegias,
+            alergias,
           ),
 
           SizedBox(
@@ -174,7 +205,7 @@ Widget _ProfileCard(
   String avatar,
   double screenWidth,
   double screenHeight,
-  List<String> alergias,
+  List<Allergy> alergias,
 ) {
   // Calculamos el radio del avatar
   double avatarRadius = screenWidth * 0.20;
@@ -234,7 +265,7 @@ Widget _ProfileCard(
                                 children: [
                                   ListTile(
                                     title: Text(
-                                      alergias[i],
+                                      alergias[i].allergyName,
                                       style: CustomTextStyles.inputText,
                                     ),
                                   ),

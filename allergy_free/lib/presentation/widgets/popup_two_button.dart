@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:allergy_free/config/utils/custom_text_styles.dart';
-import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'custom_text_button.dart';
+import 'package:allergy_free/config/utils/custom_colors.dart';
+import 'package:allergy_free/config/utils/custom_text_styles.dart';
+import 'package:flutter/material.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   final String title;
@@ -28,18 +28,11 @@ class ConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    final screenWidth = screenSize.width;
     final screenHeight = screenSize.height;
 
     return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(50.0),
-      ),
-      title: Text(
-        title,
-        style: titleStyle,
-        textAlign: TextAlign.center,
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50.0)),
+      title: Text(title, style: titleStyle, textAlign: TextAlign.center),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -53,30 +46,34 @@ class ConfirmationDialog extends StatelessWidget {
           ],
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            // spacing: 2,
             children: [
               // Botón Cancelar - Estilo FIJO
-              CustomTextButton(
-                text: cancelText,
-                width: screenWidth * 0.25,
-                height: screenHeight * 0.07,
-                customTextStyle: CustomTextStyles.blackText700, // FIJO
-                backgroundColor: Colors.grey, // FIJO
-                onPressed: () {
-              
-                  onCancel();
-                },
+              Expanded(
+                child: CustomTextButton(
+                  text: cancelText,
+                  width: double.infinity,
+                  height: screenHeight * 0.07,
+                  customTextStyle: CustomTextStyles.blackText600, // FIJO
+                  backgroundColor: Colors.grey, // FIJO
+                  onPressed: () {
+                    onCancel();
+                  },
+                ),
               ),
               // Botón Confirmar - Estilo FIJO
-              CustomTextButton(
-                text: confirmText,
-                width: screenWidth * 0.25,
-                height: screenHeight * 0.07,
-                customTextStyle: CustomTextStyles.whiteText700, // FIJO
-                backgroundColor: CustomColors.primary, // FIJO
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  onConfirm();
-                },
+              Expanded(
+                child: CustomTextButton(
+                  text: confirmText,
+                  width: double.infinity,
+                  height: screenHeight * 0.07,
+                  customTextStyle: CustomTextStyles.whiteText600, // FIJO
+                  backgroundColor: CustomColors.primary, // FIJO
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    onConfirm();
+                  },
+                ),
               ),
             ],
           ),
@@ -100,16 +97,17 @@ class ConfirmationDialog extends StatelessWidget {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => ConfirmationDialog(
-        title: title,
-        titleStyle: titleStyle,
-        message: message,
-        messageStyle: messageStyle,
-        onConfirm: onConfirm,
-        onCancel: onCancel,
-        confirmText: confirmText,
-        cancelText: cancelText,
-      ),
+      builder:
+          (context) => ConfirmationDialog(
+            title: title,
+            titleStyle: titleStyle,
+            message: message,
+            messageStyle: messageStyle,
+            onConfirm: onConfirm,
+            onCancel: onCancel,
+            confirmText: confirmText,
+            cancelText: cancelText,
+          ),
     );
   }
 }

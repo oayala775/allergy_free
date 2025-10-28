@@ -1,4 +1,6 @@
+import 'package:allergy_free/models/allergy.dart';
 import 'package:allergy_free/models/avatar.dart';
+import 'package:sqflite/sqflite.dart';
 
 import 'database_helper.dart';
 import '../models/user.dart';
@@ -46,7 +48,7 @@ class DatabaseOperations {
     }
   }
 
-  Future<int?> register(User user) async {
+  Future<int?> insertUser(User user) async {
     final db = await _databaseHelper.database;
 
     try {
@@ -58,6 +60,36 @@ class DatabaseOperations {
       return null;
     }
   }
+
+  Future<int?> updateUser(User user) async {
+    final db = await _databaseHelper.database;
+
+    try {
+      final int result = await db.update(
+        'users',
+        user.toMap(),
+        where: 'id = ?',
+        whereArgs: [user.id],
+      );
+
+      return result;
+    } catch (e) {
+      print('Error en login: $e');
+      return null;
+    }
+  }
+  // Future<int?> insertAllergyList(int userId, int allergyId) async {
+  //   final db = await _databaseHelper.database;
+
+  //   try {
+  //     final int result = await db.insert('allergies', user.toMap());
+
+  //     return result;
+  //   } catch (e) {
+  //     print('Error en login: $e');
+  //     return null;
+  //   }
+  // }
 
   Future<Avatar?> retrieveAvatarID(String avatarPath) async {
     final db = await _databaseHelper.database;
@@ -76,6 +108,86 @@ class DatabaseOperations {
     } catch (e) {
       print('Error en login: $e');
       return null;
+    }
+  }
+
+  Future<Avatar?> retrieveAvatar(String avatarID) async {
+    final db = await _databaseHelper.database;
+
+    try {
+      final List<Map<String, dynamic>> maps = await db.query(
+        'avatars',
+        where: 'id = ?',
+        whereArgs: [avatarID],
+      );
+      return Avatar.fromMap(maps.first);
+    } catch (e) {
+      print('Error al obtener un avatar $e');
+    }
+  }
+
+  Future<List<Allergy>> getSystemAllergies() async {
+    final db = await _databaseHelper.database;
+
+    try {
+      final List<Map<String, dynamic>> maps = await db.query(
+        'allergies',
+        orderBy: 'allergy_name ASC',
+      );
+      return List.generate(maps.length, (i) {
+        return Allergy.fromMap(maps[i]);
+      });
+    } catch (e) {
+      print("Error al obtener alergias: $e");
+      return [];
+    }
+  }
+
+  Future<int?> insertAllergy(Allergy allergy) async {
+    final db = await _databaseHelper.database;
+    try {
+      final int newId = await db.insert(
+        'allergies',
+        allergy.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+      return newId;
+    } catch (e) {
+      print("Error en insertAllergy: $e");
+      return null;
+    }
+  }
+
+  Future<void> insertUserAllergy(int userId, int allergyId) async {
+    final db = await _databaseHelper.database;
+    try {
+      await db.insert('user_allergies', {
+        'user_id': userId,
+        'allergy_id': allergyId,
+      }, conflictAlgorithm: ConflictAlgorithm.ignore);
+    } catch (e) {
+      print("Error en insertUserAllergy: $e");
+    }
+  }
+
+  Future<List<Allergy>> getUserAllergies(int userId) async {
+    final db = await _databaseHelper.database;
+
+    try {
+      final String sql = '''
+      SELECT a.* FROM user_allergies ua
+      JOIN allergies a ON ua.allergy_id = a.id
+      WHERE ua.user_id = ?
+    ''';
+
+      final List<Map<String, dynamic>> maps = await db.rawQuery(sql, [userId]);
+
+      return List.generate(maps.length, (i) {
+        return Allergy.fromMap(maps[i]);
+      });
+    } catch (e) {
+      print("Error en getUserAllergies: $e");
+      return []; // Devuelve una lista vacía si hay un error
     }
   }
 }

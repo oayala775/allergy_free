@@ -1,6 +1,9 @@
 import 'package:allergy_free/database/database_operations.dart';
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
+import 'package:allergy_free/models/allergy.dart';
+import 'package:allergy_free/presentation/providers/providers.dart'
+    show selectedAllergensProvider;
 import 'package:allergy_free/presentation/providers/user_provider.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:sqflite/sqflite.dart';
 import '../../widgets/widgets.dart';
+import 'package:allergy_free/config/utils/functions/hash_passwords.dart';
 
 class LoginScreen extends StatefulWidget {
   static const String screenName = "login_screen";
@@ -178,26 +182,37 @@ class _FormularyState extends ConsumerState<Formulary> {
   void _handleLogin() async {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
+    final String passwordHashed = hashPassword(password);
 
     try {
-      final user = await DatabaseOperations().login(username, password);
+      final user = await DatabaseOperations().login(username, passwordHashed);
       if (user != null) {
         ref.read(userProvider.notifier).state = user;
+        final List<Allergy> userAllergies = await DatabaseOperations()
+            .getUserAllergies(user.id!);
+        ref.read(selectedAllergensProvider.notifier).state = userAllergies;
         GoRouter.of(context).pushNamed(HomeScreen.screenName);
-        print(ref.read(userProvider.notifier).state.username);
-        print(ref.read(userProvider.notifier).state.password);
-        print(ref.read(userProvider.notifier).state.id);
-        print(ref.read(userProvider.notifier).state.avatarId);
       } else {
-        // Login failed, show error message
-        print('Invalid username or password');
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder:
+              (ctx) => CustomDialog(
+                title: 'Incorrect credentials',
+                titleStyle: CustomTextStyles.warningText600,
+                message: 'Check your username or password.',
+                messageStyle: CustomTextStyles.inputText,
+                buttonText: 'OK',
+                buttonTextStyle: CustomTextStyles.blackText600,
+                buttonColor: Colors.grey,
+                onButtonPressed:
+                    () => GoRouter.of(context).goNamed("login_screen"),
+              ),
+        );
       }
     } catch (e) {
       print('Error en login: $e');
     }
-
-    // TODO: Add redirection to main screen and validation of user
-    // context.pushNamed(HomeScreen.screenName);
   }
 
   @override

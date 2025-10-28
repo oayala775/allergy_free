@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'dart:ui'; 
-
-import '../../widgets/widgets.dart';
+import 'package:allergy_free/presentation/widgets/widgets.dart';
+import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String screenName = "home_screen";
