@@ -1,4 +1,5 @@
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
+import 'package:allergy_free/config/utils/helpers/results_state.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,14 +9,9 @@ import '../../widgets/widgets.dart';
 class ResultsScreen extends ConsumerStatefulWidget {
   static const String screenName = "results_screen";
   // Indicadores de resultado
-  final bool isAllergenFree;
-  final bool unrecognizedText;
+  final ResultsState resultsState;
 
-  const ResultsScreen({
-    super.key,
-    this.isAllergenFree = false,
-    this.unrecognizedText = false,
-  });
+  const ResultsScreen({super.key, required this.resultsState});
 
   @override
   ConsumerState<ResultsScreen> createState() => _ResultScreenState();
@@ -32,8 +28,8 @@ class _ResultScreenState extends ConsumerState<ResultsScreen> {
       body: SafeArea(
         // Agregar SafeArea aquí
         child: _Result(
-          isAllergenFree: widget.isAllergenFree,
-          couldNotReadChars: widget.unrecognizedText,
+          isAllergenFree: widget.resultsState.isAllergenFree,
+          couldNotReadChars: widget.resultsState.isUnrecognizedText,
         ),
       ),
     );
