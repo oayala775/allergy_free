@@ -129,4 +129,22 @@ class CustomTextStyles {
     fontSize: 28,
     fontFamily: "Inter",
   );
+  static const TextStyle goodResult = TextStyle(
+    color: CustomColors.primary,
+    fontWeight: FontWeight.w700,
+    fontSize: 32,
+    fontFamily: "Inter",
+  );
+  static const TextStyle badResult = TextStyle(
+    color: Color.fromARGB(255, 52, 52, 52),
+    fontWeight: FontWeight.w700,
+    fontSize: 32,
+    fontFamily: "Inter",
+  );
+  static const TextStyle darkGrey400_14 = TextStyle(
+    color: Color.fromARGB(255, 165, 165, 165),
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+    fontFamily: "Inter",
+  );
 }

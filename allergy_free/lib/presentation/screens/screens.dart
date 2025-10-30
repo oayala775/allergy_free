@@ -7,3 +7,4 @@ export 'package:allergy_free/presentation/screens/settings/settings_screen.dart'
 export 'package:allergy_free/presentation/screens/signUp/sign_up_screen.dart';
 export 'package:allergy_free/presentation/screens/termsAndConditions/terms_and_conditions_screen.dart';
 export 'package:allergy_free/presentation/screens/transition/transition_screen.dart';
+export 'package:allergy_free/presentation/screens/results/results_screen.dart';

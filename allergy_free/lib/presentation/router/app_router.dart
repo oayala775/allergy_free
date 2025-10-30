@@ -1,3 +1,5 @@
+import 'package:allergy_free/config/utils/helpers/results_state.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
 
@@ -48,6 +50,15 @@ final appRouter = GoRouter(
       name: SelectAvatarScreen.screenName,
       path: '/select_avatar',
       builder: (context, state) => SelectAvatarScreen(),
+    ),
+    GoRoute(
+      name: ResultsScreen.screenName,
+      path: '/results_screen',
+      builder: (context, state) {
+        final extraData = state.extra as ResultsState?;
+        if (extraData == null) return Placeholder();
+        return ResultsScreen(resultsState: extraData);
+      },
     ),
   ],
 );

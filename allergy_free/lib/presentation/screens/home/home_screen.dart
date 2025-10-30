@@ -1,7 +1,10 @@
-import 'dart:ui'; 
+import 'dart:ui';
+import 'package:allergy_free/config/utils/helpers/results_state.dart';
+import 'package:allergy_free/presentation/screens/results/results_screen.dart';
 import 'package:allergy_free/presentation/widgets/widgets.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,7 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   CameraController? _controller;
   bool _isCameraInitialized = false;
-  bool _isProcessing = false; 
+  bool _isProcessing = false;
 
   @override
   void initState() {
@@ -40,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _onCaptureAndProcess() async {
-    if (_controller == null || !_controller!.value.isInitialized) return;
+    // if (_controller == null || !_controller!.value.isInitialized) return;
 
     setState(() {
       _isProcessing = true; // Muestra el indicador de carga
@@ -63,8 +66,14 @@ class _HomeScreenState extends State<HomeScreen> {
       // 4. Close recognizer to free up resources
       await textRecognizer.close();
 
-      // TODO: 5. Goes to new results screen
       if (mounted) {
+        final ResultsState resultsState = ResultsState(
+          isAllergenFree: false,
+          isUnrecognizedText: true,
+        );
+        GoRouter.of(
+          context,
+        ).goNamed(ResultsScreen.screenName, extra: resultsState);
         print(recognizedText.text);
       }
     } catch (e) {
@@ -139,10 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
             left: (screenSize.width - (buttonSize + borderSize * 2)) / 2,
             child: Center(
               child: GestureDetector(
-                onTap:
-                    _isProcessing
-                        ? null
-                        : _onCaptureAndProcess, 
+                onTap: _isProcessing ? null : _onCaptureAndProcess,
                 child: Container(
                   width: buttonSize + borderSize * 2,
                   height: buttonSize + borderSize * 2,
