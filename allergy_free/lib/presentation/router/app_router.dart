@@ -1,8 +1,10 @@
+import 'package:allergy_free/config/utils/helpers/results_state.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/results_screen',
+  initialLocation: '/login',
   routes: [
     GoRoute(
       name: HomeScreen.screenName,
@@ -52,7 +54,11 @@ final appRouter = GoRouter(
     GoRoute(
       name: ResultsScreen.screenName,
       path: '/results_screen',
-      builder: (context, state) => ResultsScreen(),
+      builder: (context, state) {
+        final extraData = state.extra as ResultsState?;
+        if (extraData == null) return Placeholder();
+        return ResultsScreen(resultsState: extraData);
+      },
     ),
   ],
 );
