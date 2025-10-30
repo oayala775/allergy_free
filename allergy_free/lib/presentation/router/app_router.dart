@@ -1,9 +1,8 @@
-import 'package:allergy_free/presentation/screens/goodResult/good_result_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
 
 final appRouter = GoRouter(
-  initialLocation: '/good_result_screen',
+  initialLocation: '/results_screen',
   routes: [
     GoRoute(
       name: HomeScreen.screenName,
@@ -51,14 +50,9 @@ final appRouter = GoRouter(
       builder: (context, state) => SelectAvatarScreen(),
     ),
     GoRoute(
-      name: GoodResultScreen.screenName,
-      path: '/good_result_screen',
-      builder: (context, state) => GoodResultScreen(),
-    ),
-    GoRoute(
-      name: BadResultScreen.screenName,
-      path: '/bad_result_screen',
-      builder: (context, state) => BadResultScreen(),
+      name: ResultsScreen.screenName,
+      path: '/results_screen',
+      builder: (context, state) => ResultsScreen(),
     ),
   ],
 );

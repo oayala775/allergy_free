@@ -5,15 +5,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../widgets/widgets.dart';
 
-class GoodResultScreen extends ConsumerStatefulWidget {
-  static const String screenName = "good_result_screen";
-  const GoodResultScreen({super.key});
+class ResultsScreen extends ConsumerStatefulWidget {
+  static const String screenName = "results_screen";
+  // Indicadores de resultado
+  final bool isAllergenFree;
+  final bool unrecognizedText;
+
+  const ResultsScreen({
+    super.key,
+    this.isAllergenFree = false,
+    this.unrecognizedText = false,
+  });
 
   @override
-  ConsumerState<GoodResultScreen> createState() => _GoodResultScreen();
+  ConsumerState<ResultsScreen> createState() => _ResultScreenState();
 }
 
-class _GoodResultScreen extends ConsumerState<GoodResultScreen> {
+class _ResultScreenState extends ConsumerState<ResultsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,15 +29,25 @@ class _GoodResultScreen extends ConsumerState<GoodResultScreen> {
         automaticallyImplyLeading: false, //quitar la flecha
         actions: const [AppNameWidget()],
       ),
-      body: const SafeArea( // Agregar SafeArea aquí
-        child: _GoodResult(),
+      body: SafeArea(
+        // Agregar SafeArea aquí
+        child: _Result(
+          isAllergenFree: widget.isAllergenFree,
+          couldNotReadChars: widget.unrecognizedText,
+        ),
       ),
     );
   }
 }
 
-class _GoodResult extends StatelessWidget {
-  const _GoodResult();
+class _Result extends StatelessWidget {
+  final bool isAllergenFree;
+  final bool couldNotReadChars;
+
+  const _Result({
+    required this.isAllergenFree,
+    required this.couldNotReadChars,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,22 +59,30 @@ class _GoodResult extends StatelessWidget {
           Expanded(
             child: Center(
               child: Text(
-                'Allegen-free for you!',
-                style: CustomTextStyles.goodResult,
+                // Determinar qué mensaje mostrar
+                couldNotReadChars
+                    ? 'Could not read the characters. Please try again.'
+                    : isAllergenFree
+                    ? 'Allergen-free for you!'
+                    : 'Allergen detected - not safe for you',
+                style:
+                    isAllergenFree
+                        ? CustomTextStyles.goodResult
+                        : CustomTextStyles.badResult,
                 textAlign: TextAlign.center,
               ),
             ),
           ),
-          
+
           // Contenedor para elementos inferiores
           Column(
             children: [
               // Segundo texto arriba del botón
               Text(
-                  'Results may not be exact. Check ingredients and consult a specialist if needed.',
-                  style: CustomTextStyles.darkGrey400_14,
-                  textAlign: TextAlign.center,
-                ),
+                'Results may not be exact. Check ingredients and consult a specialist if needed.',
+                style: CustomTextStyles.darkGrey400_14,
+                textAlign: TextAlign.center,
+              ),
               // Botón en la parte inferior
               CustomTextButton(
                 text: "OK",
