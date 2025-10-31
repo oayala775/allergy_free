@@ -199,6 +199,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       selectedAllergens,
     );
     if (registrationSuccess && mounted) {
+      ref.read(selectedAvatarProvider.notifier).state =
+          'assets/images/avatar/0_Default.png';
+      ref.read(selectedAllergensProvider.notifier).state = [];
+      ref.read(termsAndConditionsProvider.notifier).state = false;
       showDialog(
         context: context,
         barrierDismissible: false,
