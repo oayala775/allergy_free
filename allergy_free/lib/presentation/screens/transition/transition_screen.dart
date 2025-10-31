@@ -1,11 +1,23 @@
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../widgets/widgets.dart';
 
-class TransitionScreen extends StatelessWidget {
+class TransitionScreen extends StatefulWidget {
   static const String screenName = "transition_screen";
   const TransitionScreen({super.key});
+
+  @override
+  State<TransitionScreen> createState() => _TransitionScreenState();
+}
+
+class _TransitionScreenState extends State<TransitionScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _startDelayedNavigation();
+  }
 
   @override
   // TODO: Queda pendiente la transición a la página de resultados.
@@ -17,6 +29,14 @@ class TransitionScreen extends StatelessWidget {
         children: [ProgressBar(), Remainder()],
       ),
     );
+  }
+
+  void _startDelayedNavigation() {
+    Future.delayed(Duration(seconds: 7), () {
+      if (mounted) {
+        GoRouter.of(context).pushNamed('home_screen');
+      }
+    });
   }
 }
 
@@ -60,13 +80,11 @@ class Remainder extends StatelessWidget {
           ),
           width: 350,
           child: const Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 24.0,
-              vertical: 8.0,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
             child: Text(
-              "Recuerda: esta app no\nreemplaza la opinión médica.",
+              "Remember that this app does not replace medical opinion.",
               style: CustomTextStyles.darkGrey400,
+              softWrap: true,
             ),
           ),
         ),
