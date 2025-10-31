@@ -211,10 +211,9 @@ class _AllergenDropdownMenuState extends ConsumerState<AllergenDropdownMenu> {
     final List<MultiSelectItem<Object>> items =
         allergyList
             .map(
-              // 2. Mapeamos cada 'allergy' (objeto) a un MultiSelectItem<Object>
               (allergy) => MultiSelectItem<Object>(
                 allergy, // El valor es el objeto Allergy completo
-                allergy.allergyName, // La etiqueta es el nombre
+                allergy.allergyName
               ),
             )
             .toList();
