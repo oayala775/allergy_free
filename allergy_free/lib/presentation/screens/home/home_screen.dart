@@ -4,18 +4,20 @@ import 'package:allergy_free/presentation/screens/results/results_screen.dart';
 import 'package:allergy_free/presentation/widgets/widgets.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:allergy_free/presentation/providers/recognized_text_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   static const String screenName = "home_screen";
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   CameraController? _controller;
   bool _isCameraInitialized = false;
   bool _isProcessing = false;
@@ -43,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _onCaptureAndProcess() async {
-    // if (_controller == null || !_controller!.value.isInitialized) return;
+    if (_controller == null || !_controller!.value.isInitialized) return;
 
     setState(() {
       _isProcessing = true; // Muestra el indicador de carga
@@ -67,14 +69,19 @@ class _HomeScreenState extends State<HomeScreen> {
       await textRecognizer.close();
 
       if (mounted) {
-        final ResultsState resultsState = ResultsState(
-          isAllergenFree: false,
-          isUnrecognizedText: true,
-        );
-        GoRouter.of(
-          context,
-        ).goNamed(ResultsScreen.screenName, extra: resultsState);
-        print(recognizedText.text);
+        // final ResultsState resultsState = ResultsState(
+        //   isAllergenFree: false,
+        //   isUnrecognizedText: true,
+        // );
+        // GoRouter.of(
+        //   context,
+        // ).goNamed(ResultsScreen.screenName, extra: resultsState);
+        // print(recognizedText.text);
+        GoRouter.of(context).pushNamed('transition_screen');
+        ref.read(recognizedTextProvider.notifier).state = recognizedText.blocks;
+        for (var text in recognizedText.blocks) {
+          print('${text.text}');
+        }
       }
     } catch (e) {
       print('Error durante el proceso de OCR: $e');
@@ -185,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     CircularProgressIndicator(color: Colors.white),
                     SizedBox(height: 20),
                     Text(
-                      'Reconociendo texto...',
+                      'Recognizing text...',
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ],
