@@ -56,6 +56,12 @@ class CustomTextStyles {
     fontSize: 20,
     fontFamily: "Inter",
   );
+  static const TextStyle inputText18 = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.w400,
+    fontSize: 18,
+    fontFamily: "Inter",
+  );
   static const TextStyle random = TextStyle(
     color: Colors.black,
     fontWeight: FontWeight.w400,
@@ -66,6 +72,12 @@ class CustomTextStyles {
     color: Colors.black,
     fontWeight: FontWeight.w800,
     fontSize: 20,
+    fontFamily: "Inter",
+  );
+  static const TextStyle blackBold24 = TextStyle(
+    color: Colors.black,
+    fontWeight: FontWeight.w800,
+    fontSize: 22,
     fontFamily: "Inter",
   );
   static const TextStyle darkGrey400 = TextStyle(
