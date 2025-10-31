@@ -1,3 +1,5 @@
+import 'package:allergy_free/models/allergy.dart';
+import 'package:allergy_free/presentation/screens/allergyDetails/allergy_details_screen.dart';
 import 'package:allergy_free/config/utils/helpers/results_state.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
@@ -58,6 +60,14 @@ final appRouter = GoRouter(
         final extraData = state.extra as ResultsState?;
         if (extraData == null) return Placeholder();
         return ResultsScreen(resultsState: extraData);
+      },
+    ),
+    GoRoute(
+      name: AllergyDetailsScreen.screenName,
+      path: '/allergy_details',
+      builder: (context, state) {
+        final extraParams = state.extra as Allergy;
+        return AllergyDetailsScreen(allergy: extraParams);
       },
     ),
   ],
