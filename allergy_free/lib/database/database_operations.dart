@@ -1,5 +1,6 @@
 import 'package:allergy_free/models/allergy.dart';
 import 'package:allergy_free/models/avatar.dart';
+import 'package:allergy_free/models/ingredient.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'database_helper.dart';
@@ -188,6 +189,27 @@ class DatabaseOperations {
     } catch (e) {
       print("Error en getUserAllergies: $e");
       return []; // Devuelve una lista vacía si hay un error
+    }
+  }
+
+  Future<List<Ingredient>> getIngredientsForAllergy(int allergyId) async {
+    final db = await _databaseHelper.database;
+    try {
+      final List<Map<String, dynamic>> maps = await db.rawQuery(
+        '''
+      SELECT T2.* FROM allergy_ingredients AS T1
+      JOIN ingredients AS T2 ON T1.ingredient_id = T2.id
+      WHERE T1.allergy_id = ?
+    ''',
+        [allergyId],
+      );
+
+      return List.generate(maps.length, (i) {
+        return Ingredient.fromMap(maps[i]);
+      });
+    } catch (e) {
+      print("Error en getIngredientsForAllergy: $e");
+      return [];
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:allergy_free/database/database_operations.dart';
 import 'package:allergy_free/models/allergy.dart';
 import 'package:allergy_free/models/avatar.dart';
 import 'package:allergy_free/models/user.dart';
+import 'package:allergy_free/presentation/screens/allergyDetails/allergy_details_screen.dart';
 import 'package:allergy_free/presentation/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -257,16 +258,34 @@ Widget _ProfileCard(
                           children: [
                             Text(
                               'Allergies', // Corregido a inglés
-                              style: CustomTextStyles.blackBold,
+                              style: CustomTextStyles.blackBold24,
                             ),
                             // Lista de alergias
                             for (int i = 0; i < alergias.length; i++)
                               Column(
                                 children: [
                                   ListTile(
-                                    title: Text(
-                                      alergias[i].allergyName,
-                                      style: CustomTextStyles.inputText,
+                                    onTap: () {
+                                      GoRouter.of(context).pushNamed(
+                                        AllergyDetailsScreen.screenName,
+                                        extra: alergias[i],
+                                      );
+                                    },
+                                    title: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          alergias[i].allergyName,
+                                          style: CustomTextStyles.blackBold,
+                                          textAlign: TextAlign.left,
+                                        ),
+                                        Text(
+                                          alergias[i].description!,
+                                          style: CustomTextStyles.inputText18,
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   // Separador (excepto para el último elemento)
