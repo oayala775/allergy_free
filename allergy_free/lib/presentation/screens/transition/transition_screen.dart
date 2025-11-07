@@ -1,18 +1,21 @@
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
+import 'package:allergy_free/config/utils/helpers/results_state.dart';
+import 'package:allergy_free/presentation/providers/recognized_text_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../widgets/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TransitionScreen extends StatefulWidget {
+class TransitionScreen extends ConsumerStatefulWidget {
   static const String screenName = "transition_screen";
   const TransitionScreen({super.key});
 
   @override
-  State<TransitionScreen> createState() => _TransitionScreenState();
+  ConsumerState<TransitionScreen> createState() => _TransitionScreenState();
 }
 
-class _TransitionScreenState extends State<TransitionScreen> {
+class _TransitionScreenState extends ConsumerState<TransitionScreen> {
   @override
   void initState() {
     super.initState();
@@ -34,7 +37,18 @@ class _TransitionScreenState extends State<TransitionScreen> {
   void _startDelayedNavigation() {
     Future.delayed(Duration(seconds: 7), () {
       if (mounted) {
-        GoRouter.of(context).pushNamed('home_screen');
+        final recognizedBlocks = ref.read(recognizedTextProvider);
+        print(recognizedBlocks);
+        for (var block in recognizedBlocks) {
+          print(block.text);
+        }
+        // TODO: implemntar logica para ver si contiene alergenos o no
+        final bool containsAllergens = true;
+        final ResultsState resultsState = ResultsState(
+          isAllergenFree: !containsAllergens,
+          isUnrecognizedText: false,
+        );
+        GoRouter.of(context).goNamed("results_screen", extra: resultsState);
       }
     });
   }

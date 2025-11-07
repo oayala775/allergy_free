@@ -76,12 +76,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         // GoRouter.of(
         //   context,
         // ).goNamed(ResultsScreen.screenName, extra: resultsState);
-        // print(recognizedText.text);
-        GoRouter.of(context).pushNamed('transition_screen');
         ref.read(recognizedTextProvider.notifier).state = recognizedText.blocks;
-        for (var text in recognizedText.blocks) {
-          print('${text.text}');
-        }
+        GoRouter.of(context).goNamed('transition_screen');
       }
     } catch (e) {
       print('Error durante el proceso de OCR: $e');
