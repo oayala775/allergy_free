@@ -1,7 +1,12 @@
 import 'package:allergy_free/config/utils/custom_colors.dart';
 import 'package:allergy_free/config/utils/custom_text_styles.dart';
 import 'package:allergy_free/config/utils/helpers/results_state.dart';
+import 'package:allergy_free/database/database_operations.dart';
+import 'package:allergy_free/models/allergy.dart';
+import 'package:allergy_free/models/ingredient.dart';
+import 'package:allergy_free/models/user.dart';
 import 'package:allergy_free/presentation/providers/recognized_text_provider.dart';
+import 'package:allergy_free/presentation/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../widgets/widgets.dart';
@@ -35,22 +40,127 @@ class _TransitionScreenState extends ConsumerState<TransitionScreen> {
   }
 
   void _startDelayedNavigation() {
-    Future.delayed(Duration(seconds: 7), () {
+    Future.delayed(Duration(seconds: 7), () async {
       if (mounted) {
         final recognizedBlocks = ref.read(recognizedTextProvider);
-        print(recognizedBlocks);
-        for (var block in recognizedBlocks) {
-          print(block.text);
-        }
-        // TODO: implemntar logica para ver si contiene alergenos o no
-        final bool containsAllergens = true;
+        final String recognizedText = recognizedBlocks
+            .map((block) => block.text)
+            .toList()
+            .join(' ');
+        print("Texto: , $recognizedText");
+        // Verificar alérgenos
+        final bool containsAllergens = await _checkForAllergens(recognizedText);
+        // Verificar si el texto está vacío
+        final bool isUnrecognized = recognizedText.trim().isEmpty;
+        // Navegar a la pantalla de resultados
         final ResultsState resultsState = ResultsState(
           isAllergenFree: !containsAllergens,
-          isUnrecognizedText: false,
+          isUnrecognizedText: isUnrecognized,
         );
         GoRouter.of(context).goNamed("results_screen", extra: resultsState);
       }
     });
+  }
+
+  Future<bool> _checkForAllergens(String recognizedText) async {
+    final DatabaseOperations dbOps = DatabaseOperations();
+
+    try {
+      // Obtener el usuario
+      final User? currentUser = ref.read(userProvider);
+
+      if (currentUser == null) {
+        print("Error, no hay usuario");
+        return false;
+      }
+
+      print("Usuario actual: ${currentUser.username} (ID: ${currentUser.id})");
+
+      // Obtener las alergias del usuario
+      final List<Allergy> userAllergies = await dbOps.getUserAllergies(
+        currentUser.id!,
+      );
+
+      if (userAllergies.isEmpty) {
+        print("Error, no hay alergias");
+        return false;
+      }
+
+      print(
+        "Alergias del usuario: ${userAllergies.map((a) => a.allergyName).toList()}",
+      );
+
+      for (final allergy in userAllergies) {
+        // Obtener ingredientes asociados a la alergia
+        final List<Ingredient> allergyIngredients = await dbOps
+            .getIngredientsForAllergy(allergy.id!);
+
+        print("alergia actual: ${allergy.allergyName}");
+        print(
+          "Ingredientes relacionados: ${allergyIngredients.map((i) => i.name).toList()}",
+        );
+
+        // Verificar si el ingrediente está en el texto leído
+        for (final ingredient in allergyIngredients) {
+          if (_containsIngredient(recognizedText, ingredient.name)) {
+            print("ALERGIA DETECTADA: ${allergy.allergyName}");
+            print("Ingrediente: ${ingredient.name}");
+            print("texto: $recognizedText");
+            return true;
+          }
+        }
+      }
+
+      print("No se detectaron alérgenos");
+      return false;
+    } catch (e) {
+      print("Error en _checkForAllergens: $e");
+      return false;
+    }
+  }
+
+  bool _containsIngredient(String recognizedText, String ingredientName) {
+    // Normalizar texto
+    final textLower = _normalizeText(recognizedText);
+    final ingredientLower = _normalizeText(ingredientName);
+
+    // print("Buscando: '$ingredientLower' en: '$textLower'");
+
+    // Búsqueda exacta primero
+    if (textLower.contains(ingredientLower)) {
+      print("Coincidencia exacta encontrada");
+      return true;
+    }
+
+    // Para ingredientes compuestos, buscar palabras clave
+    // final ingredientWords =
+    //     ingredientLower.split(' ').where((word) => word.length > 2).toList();
+
+    // if (ingredientWords.length > 1) {
+    //   int matches = 0;
+    //   for (final word in ingredientWords) {
+    //     if (textLower.contains(word)) {
+    //       matches++;
+    //     }
+    //   }
+    //   // Si la mayoría de las palabras coinciden
+    //   if (matches >= ingredientWords.length ~/ 2 + 1) {
+    //     print(
+    //       "Coincidencia parcial($matches/${ingredientWords.length} palabras)",
+    //     );
+    //     return true;
+    //   }
+    // }
+
+    return false;
+  }
+
+  String _normalizeText(String text) {
+    return text
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^\w\s]'), ' ')
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .trim();
   }
 }
 
